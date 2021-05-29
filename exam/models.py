@@ -55,7 +55,6 @@ class School(models.Model):
 
 
 
-
 class SchoolAdministrator(models.Model):
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
