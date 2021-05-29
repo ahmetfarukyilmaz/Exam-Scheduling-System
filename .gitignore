@@ -114,3 +114,6 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+exam_scheduling_system/__pycache__/__init__.cpython-39.pyc
+exam_scheduling_system/__pycache__/settings.cpython-39.pyc
+exam_scheduling_system/__pycache__/urls.cpython-39.pyc
