@@ -1,15 +1,16 @@
 from django.db import models
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
 class School(models.Model):
     name=models.CharField(max_length=100)
     email=models.EmailField()
-    schoolClass=
-    phoneNumber=models.CharField(unique=True,max_length=)
-    teacher=
-    schoolAdministrator=
-    address=models.OneToOneField('Address',on_delete=)
+    schoolClass=models.ForeignKey(SchoolClass,on_delete=models.CASCADE)
+    phoneNumber=PhoneNumberField()
+    teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    schoolAdministrator=models.ForeignKey(SchoolAdministrator,on_delete=models.CASCADE)
+    address=models.OneToOneField(Address,on_delete=models.CASCADE)
 
 class SchoolClass(models.Model):
 
