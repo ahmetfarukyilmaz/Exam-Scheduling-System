@@ -31,6 +31,7 @@ class School(models.Model):
 class SchoolClass(models.Model):
    degree = models.CharField(max_length = 20, choices = degree_choices, default = "1")
    branch = models.CharField(max_length = 20, choices = branch_choices, default = "1")
+   student = models.ManyToManyField(Student, on_delete = models.CASCADE())
    desk_plan = models.TextField()
    floor = models.IntegerField()
    representative = models.OneToOneField(Student, on_delete = models.CASCADE)
