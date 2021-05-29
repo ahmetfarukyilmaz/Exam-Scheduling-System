@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.deletion import CASCADE
+from django.db.models.fields import CharField, EmailField
+from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -14,35 +18,14 @@ branch_choices = (
     ("2", "B"),
     ("3", "C"),
     ("4", "D"),
+    ("5", "E"),
+    ("6", "F"),
+    ("7", "G"),
+    ("8", "H"),
+    ("9", "I"), 
 )
 
 # Create your models here.
-
-
-class School(models.Model):
-    name=models.CharField(max_length=100)
-    email=models.EmailField()
-    schoolClass=models.ForeignKey(SchoolClass,on_delete=models.CASCADE)
-    phoneNumber=PhoneNumberField()
-    teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
-    schoolAdministrator=models.ForeignKey(SchoolAdministrator,on_delete=models.CASCADE)
-    address=models.OneToOneField(Address,on_delete=models.CASCADE)
-
-class SchoolClass(models.Model):
-   degree = models.CharField(max_length = 20, choices = degree_choices, default = "1")
-   branch = models.CharField(max_length = 20, choices = branch_choices, default = "1")
-   desk_plan = models.TextField()
-   floor = models.IntegerField()
-   representative = models.OneToOneField(Student, on_delete = models.CASCADE)
-
-
-
-class SchoolAdministrator(models.Model):
-
-
-class Student(models.Model):
-
-class Teacher(models.Model):
 
 
 class Address(models.Model):
@@ -53,6 +36,50 @@ class Address(models.Model):
     street=models.CharField()
     postalCode=models.CharField()
 
+class SchoolClass(models.Model):
+   degree = models.CharField(max_length = 20, choices = degree_choices, default = "1")
+   branch = models.CharField(max_length = 20, choices = branch_choices, default = "1")
+   desk_plan = models.TextField()
+   floor = models.IntegerField()
+   representative = models.OneToOneField(Student, on_delete = models.CASCADE)
+
+class School(models.Model):
+    name=models.CharField(max_length=100)
+    email=models.EmailField()
+    schoolClass=models.ForeignKey(SchoolClass,on_delete=models.CASCADE)
+    phoneNumber=PhoneNumberField()
+    teacher=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    schoolAdministrator=models.ForeignKey(SchoolAdministrator,on_delete=models.CASCADE)
+    address=models.OneToOneField(Address,on_delete=models.CASCADE)
+
+
+
+
+
+class SchoolAdministrator(models.Model):
+    user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phoneNumber = PhoneNumberField()
+    address = models.OneToOneField(Address, on_delete = models.CASCADE)
+
+
+class Student(models.Model):
+    user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    name = models.CharField(max_length=100)
+    schoolNumber = models.PositiveIntegerField()
+    email = models.EmailField()
+    schoolClass = models.ForeignKey(SchoolClass)
+    exams = models.ManyToManyField(Exam)
+    phoneNumber = PhoneNumberField()
+    address = models.OneToOneField(Adress, on_delete=CASCADE)
+
+
+class Teacher(models.Model):
+    user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phoneNumber = PhoneNumberField()
 
 class Exam(models.Model):
     name = models.CharField(max_length = 50)
