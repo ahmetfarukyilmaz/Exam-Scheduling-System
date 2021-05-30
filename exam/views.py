@@ -11,5 +11,13 @@ def register(request):
 def logout(request):
     return HttpResponse("Deneme")
 
+def student(request):
+    return render(request, "student.html")
+
+def teacher(request):
+    return render(request, "teacher.html")
+
+def schooladmin(request):
+    return render(request, "schooladmin.html")
 
 
