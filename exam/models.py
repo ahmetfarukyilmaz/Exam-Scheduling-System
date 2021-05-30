@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField, EmailField
+from django.db.models.fields import CharField, EmailField, NullBooleanField
 from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
@@ -58,8 +58,8 @@ class SchoolClass(models.Model):
     ]
     degree = models.CharField(max_length = 20, choices = degree_choices, default = "9")
     branch = models.CharField(max_length = 20, choices = branch_choices, default = "A")
-    deskPlan = models.TextField()
-    floor = models.IntegerField()
+    deskPlan = models.TextField(null=True,blank=True)
+    floor = models.IntegerField(null=True,blank=True)
     representative = models.OneToOneField('Student', on_delete = models.CASCADE,null=True,blank=True)
 
     class Meta:
@@ -73,12 +73,12 @@ class SchoolClass(models.Model):
 
 class School(models.Model):
     name=models.CharField(max_length=100)
-    email=models.EmailField()
-    schoolClass=models.ForeignKey('SchoolClass',on_delete=models.CASCADE)
-    phoneNumber=PhoneNumberField()
-    teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE)
-    schoolAdministrator=models.ForeignKey('SchoolAdministrator',on_delete=models.CASCADE)
-    address=models.OneToOneField('Address',on_delete=models.CASCADE)
+    email=models.EmailField(null=True,blank=True)
+    schoolClass=models.ForeignKey('SchoolClass',on_delete=models.CASCADE,null=True,blank=True)
+    phoneNumber=PhoneNumberField(null=True,blank=True)
+    teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE,null=True,blank=True)
+    schoolAdministrator=models.ForeignKey('SchoolAdministrator',on_delete=models.CASCADE,null=True,blank=True)
+    address=models.OneToOneField('Address',on_delete=models.CASCADE,null=True,blank=True)
 
     class Meta:
         db_table = 'School'
@@ -91,9 +91,9 @@ class School(models.Model):
 class SchoolAdministrator(models.Model):
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phoneNumber = PhoneNumberField()
-    address = models.OneToOneField('Address', on_delete = models.CASCADE)
+    email = models.EmailField(null=True,blank=True)
+    phoneNumber = PhoneNumberField(null=True,blank=True)
+    address = models.OneToOneField('Address', on_delete = models.CASCADE,null=True,blank=True)
 
     class Meta:
         db_table = 'SchoolAdministrator'
@@ -107,9 +107,9 @@ class SchoolAdministrator(models.Model):
 class Teacher(models.Model):
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
-    email = models.EmailField()
-    phoneNumber = PhoneNumberField()
-    address = models.OneToOneField('Address', on_delete = models.CASCADE)
+    email = models.EmailField(null=True,blank=True)
+    phoneNumber = PhoneNumberField(null=True,blank=True)
+    address = models.OneToOneField('Address', on_delete = models.CASCADE,null=True,blank=True)
 
     class Meta:
         db_table = 'Teacher'
@@ -124,7 +124,7 @@ class Exam(models.Model):
     examLocation = models.ManyToManyField('SchoolClass',related_name='examLocation')
     observerTeacher = models.OneToOneField('Teacher', on_delete = models.CASCADE,related_name='observer_teacher')
     ownerTeacher = models.OneToOneField('Teacher', on_delete = models.CASCADE,related_name='owner_teacher')
-    studentSittingPlan = models.TextField()
+    studentSittingPlan = models.TextField(null=True,blank=True)
 
     class Meta:
         db_table = 'Exam'
