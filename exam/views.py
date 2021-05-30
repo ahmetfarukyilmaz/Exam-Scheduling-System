@@ -26,7 +26,7 @@ def logout(request):
     return HttpResponse("Deneme")
 
 def home(request):
-    return HttpResponse("Home Page")
+    return render(request, "homepage.html")
 
 def student(request):
     return render(request, "student.html")
@@ -36,5 +36,11 @@ def teacher(request):
 
 def schooladmin(request):
     return render(request, "schooladmin.html")
+
+def checkout(request):
+    return render(request, "checkout.html")
+
+def about(request):
+    return render(request, "about.html")
 
 
