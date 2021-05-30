@@ -5,5 +5,14 @@
 {% endblock title %}
 
 {% block content %}
-<h3>Register</h3>
+<h3>Kayıt Ol</h3>
+<hr>
+
+<form method="post">
+    {{form.as_p}}
+
+    <br>
+    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+
+</form>
 {% endblock content %}
