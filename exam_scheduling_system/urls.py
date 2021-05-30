@@ -19,6 +19,7 @@ from exam.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',home),
     path('login/', login),
     path('register/', register),
 ]

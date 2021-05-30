@@ -11,5 +11,8 @@ def register(request):
 def logout(request):
     return HttpResponse("Deneme")
 
+def home(request):
+    return HttpResponse("Home Page")
+
 
 
