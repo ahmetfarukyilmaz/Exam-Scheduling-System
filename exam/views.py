@@ -104,12 +104,12 @@ def is_student(user):
 
 
 
-@user_passes_test(is_student,"index")
+#@user_passes_test(is_student,"index")
 def student(request):
     return render(request, "student.html")
 
 
-@user_passes_test(is_teacher,'index',)
+#@user_passes_test(is_teacher,'index',)
 def teacher(request):
     return render(request, "teacher.html")
 
@@ -124,5 +124,22 @@ def checkout(request):
 def about(request):
     return render(request, "about.html")
 
+#Emin olunmayan kısım
+def student_viewExamDetails(request):
+    return HttpResponse('Öğrenci sınav detayı görüntüleme ')
 
+def student_changePassword(request):
+    return HttpResponse('Öğrenci şifre değiştirme')
+
+def schooladmin_uploadStudentList(request):
+    return HttpResponse('Öğrenci Listesi yükleme')
+
+def schooladmin_createSchedule(request):
+    return HttpResponse('Sınav takvimi oluşturma')
+
+def teacher_changeExamDetails(request):
+    return HttpResponse('Öğretmen sınav detayı değiştirme')
+
+def teacher_viewExamDetails(request):
+    return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
