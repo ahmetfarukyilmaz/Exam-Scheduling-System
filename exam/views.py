@@ -104,7 +104,7 @@ def is_student(user):
 
 
 
-@user_passes_test(is_student)
+@user_passes_test(is_student,"index")
 def student(request):
     return render(request, "student.html")
 
