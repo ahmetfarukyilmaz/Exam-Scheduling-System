@@ -1,11 +1,13 @@
 from django import contrib
-from exam.models import Student, Teacher, SchoolAdministrator
+from exam.models import *
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.core.files.storage import FileSystemStorage
+from exam.readStudents import uploadStudents
 
 # Create your views here.
 
@@ -123,6 +125,15 @@ def checkout(request):
 
 def about(request):
     return render(request, "about.html")
+
+
+def upload(request):
+    if request.method=="POST":
+        uploaded_file = request.FILES['document']
+        fs = FileSystemStorage()
+        fs.save(uploaded_file.name,uploaded_file)
+        uploadStudents(uploaded_file.name)
+    return render(request,'upload.html')
 
 
 
