@@ -76,7 +76,7 @@ def logoutUser(request):
 
 
 def home(request):
-    return HttpResponse("Home Page")
+    return render(request, "homepage.html")
 
 
 
@@ -117,6 +117,12 @@ def teacher(request):
 @user_passes_test(is_schooladmin, "index")
 def schooladmin(request):
     return render(request, "schooladmin.html")
+
+def checkout(request):
+    return render(request, "checkout.html")
+
+def about(request):
+    return render(request, "about.html")
 
 
 

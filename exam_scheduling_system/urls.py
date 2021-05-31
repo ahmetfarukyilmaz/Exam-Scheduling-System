@@ -25,6 +25,8 @@ urlpatterns = [
     path('register/', register),
     path('student/', student),
     path('teacher/', teacher),
-    path('schooladmin/', schooladmin)
+    path('schooladmin/', schooladmin),
+    path('checkout/', checkout),
+    path('about', about),
 
 ]
