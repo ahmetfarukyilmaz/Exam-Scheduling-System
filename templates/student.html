@@ -7,4 +7,13 @@
 {% block content %}
 <h3>Öğrenci Anasayfa</h3>
 <hr>
+
+
+    <button type="button">
+        <a href="{% url 'student_viewExamDetails' %}">Sınav detayları!</a>
+    </button>
+
+    <button type="button">
+        <a href="{% url 'student_changePassword' %}">Şifreni değiştir</a>
+    </button>
 {% endblock content %}

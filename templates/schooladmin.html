@@ -7,4 +7,14 @@
 {% block content %}
 <h3>Okul Yetkilisi Anasayfa</h3>
 <hr>
+
+    <button type="button">
+        <a href="{% url 'schooladmin_uploadStudentList' %}">Sınıf listesi yükle!</a>
+    </button>
+
+    <button type="button">
+        <a href="{% url 'create-schedule' %}">Sınav takvimi oluştur!</a>
+    </button>
+
+
 {% endblock content %}
