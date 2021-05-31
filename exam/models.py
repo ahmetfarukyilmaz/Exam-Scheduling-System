@@ -4,6 +4,7 @@ from django.db.models.deletion import CASCADE
 from django.db.models.fields import CharField, EmailField, NullBooleanField
 from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.crypto import get_random_string
 # Create your models here.
 class Address(models.Model):
 
@@ -79,8 +80,8 @@ class School(models.Model):
     teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE,null=True,blank=True)
     schoolAdministrator=models.ForeignKey('SchoolAdministrator',on_delete=models.CASCADE,null=True,blank=True)
     address=models.OneToOneField('Address',on_delete=models.CASCADE,null=True,blank=True)
-    adminAccessKey = models.CharField('adminAccesssKey',max_length=100, null=True,blank=True,default="abc123123")
-    teacherAccessKey = models.CharField('teacherAccessKey', max_length=100, null=True, blank=True, default="abc123")
+    adminAccessKey = models.CharField('adminAccesssKey',max_length=100, null=True,blank=True,default=get_random_string(length=12))
+    teacherAccessKey = models.CharField('teacherAccessKey', max_length=100, null=True, blank=True, default=get_random_string(length=12))
 
     class Meta:
         db_table = 'School'
