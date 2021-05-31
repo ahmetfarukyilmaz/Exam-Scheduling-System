@@ -79,6 +79,8 @@ class School(models.Model):
     teacher=models.ForeignKey('Teacher',on_delete=models.CASCADE,null=True,blank=True)
     schoolAdministrator=models.ForeignKey('SchoolAdministrator',on_delete=models.CASCADE,null=True,blank=True)
     address=models.OneToOneField('Address',on_delete=models.CASCADE,null=True,blank=True)
+    adminAccessKey = models.CharField('adminAccesssKey',max_length=100, null=True,blank=True,default="abc123123")
+    teacherAccessKey = models.CharField('teacherAccessKey', max_length=100, null=True, blank=True, default="abc123")
 
     class Meta:
         db_table = 'School'

@@ -5,14 +5,32 @@
 {% endblock title %}
 
 {% block content %}
-<h3>Kayıt Ol</h3>
-<hr>
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
 
-<form method="post">
-    {{form.as_p}}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <br>
+        <h3>Kayıt Ol</h3>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+        
+            <br>
+            <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+        
+        </form>
+    </div>
+</div>
 
-    <br>
-    <button type="submit" class="btn btn-primary">Kayıt Ol</button>
-
-</form>
 {% endblock content %}

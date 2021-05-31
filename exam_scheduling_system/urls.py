@@ -19,8 +19,9 @@ from exam.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',home),
-    path('login/', login),
+    path('',home,name="index"),
+    path('login/', loginUser),
+    path('logout/', logoutUser),
     path('register/', register),
     path('student/', student),
     path('teacher/', teacher),
