@@ -17,7 +17,7 @@ from os import name
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from exam.views import *
 
 
@@ -27,8 +27,8 @@ urlpatterns = [
     path('login/', loginUser),
     path('logout/', logoutUser),
     path('register/', register),
-    path('student/', include('exam.student_urls')),
-    path('teacher/', include('exam.teacher_urls')),
+    path('student/', student),
+    path('teacher/', teacher),
     path('schooladmin/', schooladmin),
     path('checkout/', checkout),
     path('about', about),
