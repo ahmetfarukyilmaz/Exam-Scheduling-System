@@ -123,6 +123,25 @@ def teacher(request):
 def schooladmin(request):
     return render(request, "schooladmin.html")
 
+def student_viewExamDetails(request):
+    return HttpResponse('Öğrenci sınav detayı görüntüleme ')
+
+
+def student_changePassword(request):
+    return HttpResponse('Öğrenci şifre değiştirme')
+
+def schooladmin_uploadStudentList(request):
+    return HttpResponse('Öğrenci Listesi yükleme')
+
+def schooladmin_createSchedule(request):
+    return HttpResponse('Sınav takvimi oluşturma')
+
+def teacher_changeExamDetails(request):
+    return HttpResponse('Öğretmen sınav detayı değiştirme')
+
+def teacher_viewExamDetails(request):
+    return HttpResponse('Öğretmen sınav detayı görüntüleme')
+
 def checkout(request):
     return render(request, "checkout.html")
 
