@@ -149,8 +149,7 @@ def about(request):
     return render(request, "about.html")
 
 
-
-def upload(request):
+def schooladmin_uploadStudentList(request):
     if request.method=="POST":
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
