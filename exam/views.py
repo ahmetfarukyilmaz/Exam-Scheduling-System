@@ -52,12 +52,14 @@ def register(request):
             if school.teacherAccessKey == accessKey:
                 newTeacher = Teacher()
                 newTeacher.user = newUser
+                newTeacher.school = school
                 newTeacher.save()
                 login(request, newUser)
                 return redirect("/teacher/")
             if school.adminAccessKey == accessKey:
                 newAdministrator = SchoolAdministrator()
                 newAdministrator.user = newUser
+                newAdministrator.school = school
                 newAdministrator.save()
                 login(request, newUser)
                 return redirect("/schooladmin")
