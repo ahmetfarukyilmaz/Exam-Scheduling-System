@@ -1,13 +1,15 @@
 from django import contrib
+from django.conf import settings
+import os
+import pandas as pd
 from exam.models import *
 from django.shortcuts import redirect, render, HttpResponse
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm,UploadStudentForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.files.storage import FileSystemStorage
-from exam.readStudents import uploadStudents
 
 # Create your views here.
 
@@ -152,10 +154,51 @@ def about(request):
 
 
 def schooladmin_uploadStudentList(request):
-    if request.method=="POST":
+    form = UploadStudentForm(request.POST or None)
+    currentAdmin = SchoolAdministrator.objects.get(user_id=request.user.id)
+    if form.is_valid():
+        
+        degree = form.cleaned_data.get('degree')
+        branch = form.cleaned_data.get('branch')
+        if not SchoolClass.objects.filter(school_id=currentAdmin.school.id ,degree=degree ,branch=branch).first():
+            newClass = SchoolClass()
+            newClass.school = currentAdmin.school
+            newClass.degree = degree
+            newClass.branch = branch
+            newClass.save()
+        else:
+            newClass=SchoolClass.objects.get(school_id=currentAdmin.school.id,degree=degree,branch=branch)
+
         uploaded_file = request.FILES['document']
         fs = FileSystemStorage()
         fs.save(uploaded_file.name,uploaded_file)
-        uploadStudents(uploaded_file.name)
-    return render(request,'upload.html')
+        base_dir = settings.MEDIA_ROOT
+        studentList = pd.read_excel(os.path.join(base_dir,str(uploaded_file.name)),header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
+    
+        for i in range(len(studentList)):
+            if type(studentList.values[i][0])!=int:
+                break
+            number = studentList.values[i][0]
+            firstName = studentList.values[i][1]
+            lastName = studentList.values[i][2]
+            if  Student.objects.filter(schoolNumber=number).first():
+                continue
+            newUser = User(username = firstName + "_" + str(number))
+            newUser.set_password('123456')
+            newUser.save()
+            newStudent = Student()
+            newStudent.user= newUser
+            newStudent.name = str(firstName) + " " + str(lastName)
+            newStudent.schoolNumber = number
+            newStudent.school = currentAdmin.school
+            newStudent.schoolClass = newClass
+            newStudent.save()
+
+            
+    context = {
+        "form" : form
+    }
+    return render(request, "upload.html", context)
+
+    
 

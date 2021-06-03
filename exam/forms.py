@@ -1,4 +1,4 @@
-from exam.models import School
+from exam.models import School,degree_choices,branch_choices
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -32,4 +32,20 @@ class RegisterForm(forms.Form):
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")
     password = forms.CharField(max_length=30, widget=forms.PasswordInput, label="Şifre")
+
+
+class UploadStudentForm(forms.Form):
+    degree = forms.ChoiceField(choices=degree_choices)
+    branch = forms.ChoiceField(choices = branch_choices)
+    
+    def clean(self):
+        degree = self.cleaned_data.get('degree')
+        branch = self.cleaned_data.get('branch')
+        values ={
+            "degree" : degree,
+            "branch" : branch,
+
+        }
+        return values
+
     

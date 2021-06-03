@@ -6,6 +6,25 @@ from django.db.models.fields.related import ForeignKey
 from phonenumber_field.modelfields import PhoneNumberField
 from django.utils.crypto import get_random_string
 # Create your models here.
+
+degree_choices = [
+    ("9", "9"),
+    ("10", "10"),
+    ("11", "11"),
+    ("12", "12"),
+    ]
+
+branch_choices = [
+    ("A", "A"),
+    ("B", "B"),
+    ("C", "C"),
+    ("D", "D"),
+    ("E", "E"),
+    ("F", "F"),
+    ("G", "G"),
+    ("H", "H"),
+    ("I", "I"), 
+    ]
 class Address(models.Model):
 
     country=models.CharField(max_length=50)
@@ -40,24 +59,7 @@ class Student(models.Model):
 
 
 class SchoolClass(models.Model):
-    degree_choices = [
-    ("9", "9"),
-    ("10", "10"),
-    ("11", "11"),
-    ("12", "12"),
-    ]
-
-    branch_choices = [
-    ("A", "A"),
-    ("B", "B"),
-    ("C", "C"),
-    ("D", "D"),
-    ("E", "E"),
-    ("F", "F"),
-    ("G", "G"),
-    ("H", "H"),
-    ("I", "I"), 
-    ]
+    
     school = models.ForeignKey('School',on_delete=models.CASCADE,null=True,blank=True)
     degree = models.CharField(max_length = 20, choices = degree_choices, default = "9")
     branch = models.CharField(max_length = 20, choices = branch_choices, default = "A")

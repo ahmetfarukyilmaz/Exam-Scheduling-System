@@ -1,17 +1,18 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block title %} Upload {% endblock title %} 
+{%block content %}
+{% load crispy_forms_tags %}
 
-{% block title %}
-    Upload 
-{% endblock title %}
+<div class="row">
+  <div class="col-md-6 offset-md-3">
+    <br />
+    <h3>Öğrenci Listesi Yükle</h3>
+    <hr />
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form|crispy}}
+      <input type="file" name="document" />
+      <button type="submit">Öğrenci Listesi Yükle</button>
+    </form>
+    <div></div>
+    {% endblock content %}
 
-{% block content %}
-<h3>Student Upload Test</h3>
-
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
-
-
-<input type="file" name="document">
-<button type="submit">Upload File</button>
-</form>
-{% endblock content %}
