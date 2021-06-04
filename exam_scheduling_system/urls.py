@@ -37,6 +37,7 @@ urlpatterns = [
     path('teacher/', teacher),
     path('teacher/change-exam-details/', teacher_changeExamDetails),
     path('teacher/view-exam-details/', teacher_viewExamDetails),
+    path('teacher/create-exam/', teacher_createExam),
     path('schooladmin/', schooladmin),
     #path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
     path('schooladmin/create-schedule/', schooladmin_createSchedule),
