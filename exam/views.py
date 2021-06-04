@@ -150,7 +150,12 @@ def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
 def teacher_createExam(request):
-    return render(request, 'createExam.html')
+    form = ExamForm(request.POST)
+    context = {
+        'form' : form
+    }
+
+    return render(request, "createExam.html", context)
 
 def checkout(request):
     return render(request, "checkout.html")
@@ -207,14 +212,6 @@ def schooladmin_uploadStudentList(request):
     return render(request, "upload.html", context)
 
 
-def createExam(request):
-    form = ExamForm(request.POST)
-    if form.is_valid():
-        username = form.cleaned_data.get('username')
-    context = {
-        "form": form
-    }
 
-    return render(request, "createExam.html", context)
 
 

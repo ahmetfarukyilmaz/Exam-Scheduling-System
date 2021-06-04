@@ -1,20 +1,36 @@
-{% extends 'layout.html' %} {% block title %} Upload {% endblock title %}
-{%block content %} {% load crispy_forms_tags %} {% load static%}
+{% extends 'layout.html' %}
 
-<head>
-  <link rel="stylesheet" href="{% static 'css/style.css'%}" />
-</head>
+{% block title %}
+    Sınav Oluşturma
+{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <div class="row">
-  <div class="col-md-6 offset-md-3">
-    <br />
-    <h3>sagjksjanla</h3>
-    <hr />
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{form|crispy}}
+    <div class="col-md-6 offset-md-3">
+        <br>
+        <h3>Sınav Oluştur</h3>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
 
-    </form>
-    <div></div>
-    {% endblock content %}
-  </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Sınavı oluştur!</button>
+
+        </form>
+    </div>
 </div>
+
+{% endblock content %}

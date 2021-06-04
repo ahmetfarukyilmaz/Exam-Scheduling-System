@@ -1,4 +1,4 @@
-from exam.models import School,degree_choices,branch_choices, Exam
+from exam.models import Teacher, School, SchoolClass, degree_choices,branch_choices, Exam
 from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
@@ -49,19 +49,37 @@ class UploadStudentForm(forms.Form):
         }
         return values
 
-    
+
 class ExamForm(forms.Form):
-    name = forms.CharField(max_length=50, label="Kullanıcı Adı")
-    #password = forms.CharField(max_length=30, widget=forms.PasswordInput, label="Şifre")
+    name = forms.CharField(max_length=50, label = "Sınav Adı")
+    date = forms.DateTimeField(label = "Sınav Tarihi")
+    duration = forms.IntegerField(label = "Sınav süresi(dakika)")
+    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınava girecek sınıflar")
+    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınav yerleri")
+    observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözlemci hoca")
+    ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin hocası")
 
     def clean(self):
-        name = self.cleaned_data.get('name')
-        #branch = self.cleaned_data.get('branch')
-        values ={
-            "name" : name,
-            #"branch" : branch,
+        name = self.cleaned_data.get("name")
+        date = self.cleaned_data.get("date")
+        duration = self.cleaned_data.get("duration")
+        classes = self.cleaned_data.get("classes")
+        examLocation = self.cleaned_data.get("examLocation")
+        observerTeacher = self.cleaned_data.get("observerTeacher")
+        ownerTeacher = self.cleaned_data.get("ownerTeacher")
 
+
+        values = {
+            "name"  : name,
+            "date"  : date,
+            "duration"    : duration,
+            "classes" : classes,
+            "examLocation": examLocation ,
+            "observerTeacher": observerTeacher,
+            "ownerTeacher": ownerTeacher,
         }
+
+
         return values
 
 
