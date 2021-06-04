@@ -155,7 +155,7 @@ def about(request):
 
 def schooladmin_uploadStudentList(request):
     form = UploadStudentForm(request.POST or None)
-    currentAdmin = SchoolAdministrator.objects.get(user_id=request.user.id)
+    currentAdmin = SchoolAdministrator.objects.filter(user_id=request.user.id).first()
     if form.is_valid():
         
         degree = form.cleaned_data.get('degree')
