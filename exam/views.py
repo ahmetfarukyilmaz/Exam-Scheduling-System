@@ -31,8 +31,23 @@ def loginUser(request):
             return render(request,"login.html",context)
         
         login(request, user)
-        return redirect("/teacher/")
+        try:
+            teacher =Teacher.objects.get(user_id = request.user.id)
+        except Teacher.DoesNotExist:
+            teacher = None
+        try:
+            schooladmin =SchoolAdministrator.objects.get(user_id = request.user.id)
+        except SchoolAdministrator.DoesNotExist:
+            schooladmin = None
 
+        if teacher is not None:
+            return redirect("/teacher/")
+        elif schooladmin is not None:
+            return redirect("/schooladmin/")
+        else:
+            return redirect("/student/")
+
+        
     return render(request,"login.html",context)
 
 
