@@ -41,15 +41,15 @@ class Address(models.Model):
 
 
 class Student(models.Model):
-    school = models.ForeignKey('School',on_delete=models.CASCADE,null=True,blank=True)
+    school = models.ForeignKey('School',on_delete=CASCADE,null=True,blank=True)
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     schoolNumber = models.PositiveIntegerField()
     email = models.EmailField(null=True,blank=True)
-    schoolClass = models.ForeignKey('SchoolClass',on_delete=models.SET_NULL,null=True)
+    schoolClass = models.ForeignKey('SchoolClass',on_delete=SET_NULL,null=True)
     exams = models.ManyToManyField('Exam',blank=True)
     phoneNumber = PhoneNumberField(null=True,blank=True)
-    address = models.OneToOneField('Address', on_delete=models.SET_NULL,null=True,blank=True)
+    address = models.OneToOneField('Address', on_delete=SET_NULL,null=True,blank=True)
 
     class Meta:
         db_table = 'Student'
@@ -60,7 +60,7 @@ class Student(models.Model):
 
 class SchoolClass(models.Model):
     
-    school = models.ForeignKey('School',on_delete=models.CASCADE,null=True,blank=True)
+    school = models.ForeignKey('School',on_delete=CASCADE,null=True,blank=True)
     degree = models.CharField(max_length = 20, choices = degree_choices, default = "9")
     branch = models.CharField(max_length = 20, choices = branch_choices, default = "A")
     deskPlan = models.TextField(null=True,blank=True)
@@ -93,7 +93,7 @@ class School(models.Model):
 
 
 class SchoolAdministrator(models.Model):
-    school = models.ForeignKey('School',on_delete=models.CASCADE,null=True,blank=True)
+    school = models.ForeignKey('School',on_delete=CASCADE,null=True,blank=True)
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(null=True,blank=True)
@@ -110,7 +110,7 @@ class SchoolAdministrator(models.Model):
 
 
 class Teacher(models.Model):
-    school = models.ForeignKey('School',on_delete=models.CASCADE,null=True,blank=True)
+    school = models.ForeignKey('School',on_delete=CASCADE,null=True,blank=True)
     user = models.OneToOneField(User, on_delete=CASCADE, primary_key=True)
     name = models.CharField(max_length=100)
     email = models.EmailField(null=True,blank=True)
@@ -128,8 +128,8 @@ class Exam(models.Model):
     duration = models.IntegerField()
     classes = models.ManyToManyField('SchoolClass',related_name='classes')
     examLocation = models.ManyToManyField('SchoolClass',related_name='examLocation')
-    observerTeacher = models.ForeignKey('Teacher', on_delete = models.SET_NULL, null=True, related_name='observer_teacher')
-    ownerTeacher = models.ForeignKey('Teacher', on_delete = models.SET_NULL, null=True, related_name='owner_teacher')
+    observerTeacher = models.ForeignKey('Teacher', on_delete =SET_NULL, null=True, related_name='observer_teacher')
+    ownerTeacher = models.ForeignKey('Teacher', on_delete =SET_NULL, null=True, related_name='owner_teacher')
     studentSittingPlan = models.TextField(null=True,blank=True)
     schedule = ForeignKey('Schedule',on_delete= SET_NULL, null=True, blank=True)
 
@@ -141,7 +141,7 @@ class Exam(models.Model):
 
 class Schedule(models.Model):
     name = models.CharField(max_length = 50)
-    administrator = models.ForeignKey('SchoolAdministrator', on_delete = models.CASCADE)
+    administrator = models.ForeignKey('SchoolAdministrator', on_delete =CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 

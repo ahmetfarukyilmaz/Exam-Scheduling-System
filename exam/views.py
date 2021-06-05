@@ -5,6 +5,7 @@ from numpy.lib.function_base import extract
 import pandas as pd
 from exam.models import *
 from exam.sql import *
+from exam.functions import *
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import *
 from django.contrib.auth.models import User
@@ -202,13 +203,7 @@ def registerSchool(request):
         teacherAccessKey=get_random_string(length=18)
         setSchool(newSchool,schoolName,address,email,phoneNumber,adminAccessKey,teacherAccessKey)
         newSchool.save()
-        template = render_to_string('email.html',{'teacherAccessKey':teacherAccessKey,
-        'adminAccessKey':adminAccessKey})
-        send_mail('Exam Scheduling System Erişim Anahtarları',
-                    template,
-                    settings.EMAIL_HOST_USER,
-                    [str(email)],
-                    fail_silently=False)
+        mail_sender(email,teacherAccessKey,adminAccessKey)
         messages.success(request,'Okul Kaydetme Başarılı. Mail adresinize gelen erişim anahtarları ile sisteme kayıt olabilirsiniz.')
         return redirect('/register-school/')
     context = {
@@ -224,7 +219,6 @@ def schooladmin_uploadStudentList(request):
     form = UploadStudentForm(request.POST or None)
     currentAdmin = SchoolAdministrator.objects.filter(user_id=request.user.id).first()
     if form.is_valid():
-
         degree = form.cleaned_data.get('degree')
         branch = form.cleaned_data.get('branch')
         if not SchoolClass.objects.filter(school_id=currentAdmin.school.id ,degree=degree ,branch=branch).first():
@@ -236,12 +230,7 @@ def schooladmin_uploadStudentList(request):
         else:
             newClass=SchoolClass.objects.get(school_id=currentAdmin.school.id,degree=degree,branch=branch)
 
-        uploaded_file = request.FILES['document']
-        fs = FileSystemStorage()
-        fs.save(uploaded_file.name,uploaded_file)
-        base_dir = settings.MEDIA_ROOT
-        studentList = pd.read_excel(os.path.join(base_dir,str(uploaded_file.name)),
-        header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
+        studentList = read_student_list(request)
 
         for i in range(len(studentList)):
             if type(studentList.values[i][0])!=int:
@@ -261,9 +250,11 @@ def schooladmin_uploadStudentList(request):
             newStudent.school = currentAdmin.school
             newStudent.schoolClass = newClass
             newStudent.save()
-            messages.success(degree+"-" + branch + "sınıf listesi başarıyla yüklendi.")
+            print(str(newStudent.schoolNumber) + " " + newStudent.name)
+            
 
-
+        messages.success(request,degree+ "-" + branch + " sınıf listesi başarıyla yüklendi.")
+        return redirect("/schooladmin/upload-student-list/")
     context = {
         "form" : form
     }

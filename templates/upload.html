@@ -1,6 +1,15 @@
 {% extends 'layout.html' %} {% block title %} Upload {% endblock title %}
 {%block content %} {% load crispy_forms_tags %} {% load static%}
-
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
 <head>
   <link rel="stylesheet" href="{% static 'css/style.css'%}" />
 </head>

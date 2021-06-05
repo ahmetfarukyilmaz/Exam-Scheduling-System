@@ -27,9 +27,12 @@ urlpatterns = [
     path('login/', loginUser),
     path('logout/', logoutUser),
     path('register/', register),
-    path('register-school/', registerSchool),
+    path('profile/', profile),
     path('about', about),
+    path('register-school/', registerSchool),
+    path('schooladmin/', schooladmin),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
+    path('schooladmin/create-schedule/', schooladmin_createSchedule),
     path('student/', student),
     path('student/view-exam-details/', student_viewExamDetails),
     path('student/change-password/', student_changePassword),
@@ -37,9 +40,8 @@ urlpatterns = [
     path('teacher/change-exam-details/', teacher_changeExamDetails),
     path('teacher/view-exam-details/', teacher_viewExamDetails),
     path('teacher/create-exam/', teacher_createExam),
-    path('schooladmin/', schooladmin),
-    path('schooladmin/create-schedule/', schooladmin_createSchedule),
-    path('profile/', profile),
+   
+    
     
 
 

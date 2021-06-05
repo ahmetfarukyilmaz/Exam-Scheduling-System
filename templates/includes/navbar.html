@@ -4,12 +4,12 @@
     <li class="nav-item active">
       <a class="nav-link" href="/">Ana Sayfa</a>
     </li>
+      <a class="nav-link active" href="/about">Hakkımızda</a>
+    </li>
     <li class="nav-item">
       <a class="nav-link active" href="/register-school">Okul Kaydet</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" href="/about">Hakkımızda</a>
-    </li>
     {% if request.user.is_authenticated %}
     <li class="nav-item">
       <a class="nav-link active" href="/schooladmin/upload-student-list">Upload Students(Test)</a>
