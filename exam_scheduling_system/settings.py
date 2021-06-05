@@ -141,3 +141,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+#Email Settings
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER= 'exam.scheduling.system@gmail.com'
+EMAIL_HOST_PASSWORD='exam_scheduling_system'
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL = False
+
