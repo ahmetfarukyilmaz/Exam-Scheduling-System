@@ -5,11 +5,7 @@ from numpy.lib.function_base import extract
 import pandas as pd
 from exam.models import *
 from django.shortcuts import redirect, render, HttpResponse
-<<<<<<< HEAD
-from .forms import RegisterForm, LoginForm, SchoolAdminInfoForm, StudentInfoForm, TeacherInfoForm,UploadStudentForm
-=======
-from .forms import RegisterForm, LoginForm, UploadStudentForm, ExamForm
->>>>>>> dce996ed8ae646f97051c2615a13351499288c9a
+from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
