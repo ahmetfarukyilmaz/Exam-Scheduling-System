@@ -5,12 +5,18 @@ from numpy.lib.function_base import extract
 import pandas as pd
 from exam.models import *
 from django.shortcuts import redirect, render, HttpResponse
+<<<<<<< HEAD
 from .forms import RegisterForm, LoginForm, SchoolAdminInfoForm, StudentInfoForm, TeacherInfoForm,UploadStudentForm
+=======
+from .forms import RegisterForm, LoginForm, UploadStudentForm, ExamForm
+>>>>>>> dce996ed8ae646f97051c2615a13351499288c9a
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.core.files.storage import FileSystemStorage
+from exam.readStudents import uploadStudents
+#from .examCreatingForms import ExamForm
 
 # Create your views here.
 
@@ -32,6 +38,7 @@ def loginUser(request):
         return redirect("/teacher/")
 
     return render(request,"login.html",context)
+
 
 def register(request):
     form = RegisterForm(request.POST or None)
@@ -119,12 +126,12 @@ def student(request):
     return render(request, "student.html")
 
 
-@user_passes_test(is_teacher,'index',)
+#@user_passes_test(is_teacher,'index',)
 def teacher(request):
     return render(request, "teacher.html")
 
 
-@user_passes_test(is_schooladmin, "index")
+#@user_passes_test(is_schooladmin, "index")
 def schooladmin(request):
     return render(request, "schooladmin.html")
 
@@ -147,6 +154,14 @@ def teacher_changeExamDetails(request):
 def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
+def teacher_createExam(request):
+    form = ExamForm(request.POST)
+    context = {
+        'form' : form
+    }
+
+    return render(request, "createExam.html", context)
+
 def checkout(request):
     return render(request, "checkout.html")
 
@@ -156,9 +171,9 @@ def about(request):
 
 def schooladmin_uploadStudentList(request):
     form = UploadStudentForm(request.POST or None)
-    currentAdmin = SchoolAdministrator.objects.get(user_id=request.user.id)
+    currentAdmin = SchoolAdministrator.objects.filter(user_id=request.user.id).first()
     if form.is_valid():
-        
+
         degree = form.cleaned_data.get('degree')
         branch = form.cleaned_data.get('branch')
         if not SchoolClass.objects.filter(school_id=currentAdmin.school.id ,degree=degree ,branch=branch).first():
@@ -175,7 +190,7 @@ def schooladmin_uploadStudentList(request):
         fs.save(uploaded_file.name,uploaded_file)
         base_dir = settings.MEDIA_ROOT
         studentList = pd.read_excel(os.path.join(base_dir,str(uploaded_file.name)),header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
-    
+
         for i in range(len(studentList)):
             if type(studentList.values[i][0])!=int:
                 break
@@ -195,7 +210,7 @@ def schooladmin_uploadStudentList(request):
             newStudent.schoolClass = newClass
             newStudent.save()
 
-            
+
     context = {
         "form" : form
     }
@@ -419,4 +434,5 @@ def profile(request):
 
 
     
+
 
