@@ -1,6 +1,7 @@
 from exam.models import School,degree_choices,branch_choices
 from django import forms
 from django.core.exceptions import ValidationError
+from phonenumber_field.formfields import PhoneNumberField
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")
@@ -48,4 +49,34 @@ class UploadStudentForm(forms.Form):
         }
         return values
 
-    
+class TeacherInfoForm(forms.Form):
+    name = forms.CharField(max_length=100, label="Ad Soyad")
+    email = forms.EmailField(max_length=100, label="Email")
+    phoneNumber = PhoneNumberField(label="Telefon")
+    country=forms.CharField(max_length=50)
+    city=forms.CharField(max_length=50)
+    province=forms.CharField(max_length=50)
+    street=forms.CharField(max_length=50)
+    postalCode=forms.CharField(max_length=20)
+
+class SchoolAdminInfoForm(forms.Form):
+    name = forms.CharField(max_length=100, label="Ad Soyad")
+    email = forms.EmailField(max_length=100, label="Email")
+    phoneNumber = PhoneNumberField(label="Telefon")
+    country=forms.CharField(max_length=50)
+    city=forms.CharField(max_length=50)
+    province=forms.CharField(max_length=50)
+    street=forms.CharField(max_length=50)
+    postalCode=forms.CharField(max_length=20)
+
+class StudentInfoForm(forms.Form):
+    email = forms.EmailField(max_length=100, label="Email")
+    phoneNumber = PhoneNumberField(label="Telefon")
+    country=forms.CharField(max_length=50)
+    city=forms.CharField(max_length=50)
+    province=forms.CharField(max_length=50)
+    street=forms.CharField(max_length=50)
+    postalCode=forms.CharField(max_length=20)
+
+
+

@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Profil
+{% endblock title %}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h3>Profil</h3>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+        
+            <br>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

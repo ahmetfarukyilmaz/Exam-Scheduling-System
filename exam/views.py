@@ -1,10 +1,11 @@
 from django import contrib
 from django.conf import settings
 import os
+from numpy.lib.function_base import extract
 import pandas as pd
 from exam.models import *
 from django.shortcuts import redirect, render, HttpResponse
-from .forms import RegisterForm, LoginForm,UploadStudentForm
+from .forms import RegisterForm, LoginForm, SchoolAdminInfoForm, StudentInfoForm, TeacherInfoForm,UploadStudentForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -199,6 +200,223 @@ def schooladmin_uploadStudentList(request):
         "form" : form
     }
     return render(request, "upload.html", context)
+
+
+
+def profile(request):
+    try:
+        teacher =Teacher.objects.get(user_id = request.user.id)
+    except Teacher.DoesNotExist:
+        teacher = None
+    try:
+        schooladmin =SchoolAdministrator.objects.get(user_id = request.user.id)
+    except SchoolAdministrator.DoesNotExist:
+        schooladmin = None
+    try:
+        student =Student.objects.get(user_id = request.user.id)
+    except Student.DoesNotExist:
+        student = None
+
+    if(teacher is not None):
+        if request.method == "POST":
+            form = TeacherInfoForm(request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                email = form.cleaned_data.get('email')
+                phoneNumber = form.cleaned_data.get('phoneNumber')
+                country = form.cleaned_data.get('country')
+                city = form.cleaned_data.get('city')
+                province = form.cleaned_data.get('province')
+                street = form.cleaned_data.get('street')
+                postalCode = form.cleaned_data.get('postalCode')
+                if teacher.address != None:
+                    address = teacher.address
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                else:
+                    address = Address()
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                    teacher.address = address
+                    teacher.save()
+                teacher.name = name
+                teacher.email = email
+                teacher.phoneNumber = phoneNumber
+                teacher.save()
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+        else:
+            if teacher.address == None:
+                dict = {
+                    "name" : teacher.name,
+                    "email" : teacher.email,
+                    "phoneNumber" : teacher.phoneNumber
+                    
+                }
+            else:
+                dict = {
+                    "name" : teacher.name,
+                    "email" : teacher.email,
+                    "phoneNumber" : teacher.phoneNumber,
+                    "country" : teacher.address.country,
+                    "city"    : teacher.address.city,
+                    "province": teacher.address.province,
+                    "street"  : teacher.address.street,
+                    "postalCode" : teacher.address.postalCode
+                }
+            form = TeacherInfoForm(dict)
+            
+            
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+    
+    if(schooladmin is not None):
+        schooladmin =SchoolAdministrator.objects.get(user_id = request.user.id)
+        if request.method == "POST":
+            form = SchoolAdminInfoForm(request.POST)
+            if form.is_valid():
+                name = form.cleaned_data.get('name')
+                email = form.cleaned_data.get('email')
+                phoneNumber = form.cleaned_data.get('phoneNumber')
+                country = form.cleaned_data.get('country')
+                city = form.cleaned_data.get('city')
+                province = form.cleaned_data.get('province')
+                street = form.cleaned_data.get('street')
+                postalCode = form.cleaned_data.get('postalCode')
+                if schooladmin.address != None:
+                    address = schooladmin.address
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                else:
+                    address = Address()
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                    schooladmin.address = address
+                    schooladmin.save()
+                schooladmin.name = name
+                schooladmin.email = email
+                schooladmin.phoneNumber = phoneNumber
+                schooladmin.save()
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+        else:
+            if schooladmin.address == None:
+                dict = {
+                    "name" : schooladmin.name,
+                    "email" : schooladmin.email,
+                    "phoneNumber" : schooladmin.phoneNumber
+                    
+                }
+            else:
+                dict = {
+                    "name" : schooladmin.name,
+                    "email" : schooladmin.email,
+                    "phoneNumber" : schooladmin.phoneNumber,
+                    "country" : schooladmin.address.country,
+                    "city"    : schooladmin.address.city,
+                    "province": schooladmin.address.province,
+                    "street"  : schooladmin.address.street,
+                    "postalCode" : schooladmin.address.postalCode
+                }
+            form = SchoolAdminInfoForm(dict)
+            
+            
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+    
+    if(student is not None):
+        student =Student.objects.get(user_id = request.user.id)
+        if request.method == "POST":
+            form = StudentInfoForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data.get('email')
+                phoneNumber = form.cleaned_data.get('phoneNumber')
+                country = form.cleaned_data.get('country')
+                city = form.cleaned_data.get('city')
+                province = form.cleaned_data.get('province')
+                street = form.cleaned_data.get('street')
+                postalCode = form.cleaned_data.get('postalCode')
+                if student.address != None:
+                    address = student.address
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                else:
+                    address = Address()
+                    address.country = country
+                    address.city = city
+                    address.province = province
+                    address.street = street
+                    address.postalCode = postalCode
+                    address.save()
+                    student.address = address
+                    student.save()
+                student.email = email
+                student.phoneNumber = phoneNumber
+                student.save()
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+        else:
+            if student.address == None:
+                dict = {
+                    "email" : student.email,
+                    "phoneNumber" : student.phoneNumber
+                    
+                }
+            else:
+                dict = {
+                    "email" : student.email,
+                    "phoneNumber" : student.phoneNumber,
+                    "country" : student.address.country,
+                    "city"    : student.address.city,
+                    "province": student.address.province,
+                    "street"  : student.address.street,
+                    "postalCode" : student.address.postalCode
+                }
+            form = StudentInfoForm(dict)
+            
+            
+            context = {
+                "form" : form
+            }
+            return render(request, "profile.html", context)
+
+    
+
+
+    
+
+
+
 
     
 

@@ -40,6 +40,8 @@ urlpatterns = [
     path('schooladmin/', schooladmin),
     #path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
     path('schooladmin/create-schedule/', schooladmin_createSchedule),
+    path('profile/', profile),
+    
 
 
 ]
