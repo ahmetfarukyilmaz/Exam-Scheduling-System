@@ -63,7 +63,7 @@ def register(request):
                 context = {
                 "form" : form
                 }
-                messages.warning(request, "Erişim Anahtarı Hatalı")
+                messages.warning(request, "Erişim Anahtarı Hatalı!")
                 return render(request, "register.html", context)
 
             newUser = User(username = username)
@@ -76,6 +76,7 @@ def register(request):
                 newTeacher.school = school
                 newTeacher.save()
                 login(request, newUser)
+                messages.success(request,"Başarıyla Kayıt Oldunuz!")
                 return redirect("/teacher/")
             if school.adminAccessKey == accessKey:
                 newAdministrator = SchoolAdministrator()
@@ -83,6 +84,7 @@ def register(request):
                 newAdministrator.school = school
                 newAdministrator.save()
                 login(request, newUser)
+                messages.success(request,"Başarıyla Kayıt Oldunuz!")
                 return redirect("/schooladmin")
 
             
@@ -97,6 +99,7 @@ def register(request):
 
 def logoutUser(request):
     logout(request)
+    messages.success(request, "Başarıyla Çıkış Yaptınız!")
     return redirect('index')
 
 
@@ -277,6 +280,12 @@ def profile(request):
                 teacher.email = email
                 teacher.phoneNumber = phoneNumber
                 teacher.save()
+                context = {
+                    "form" : form
+                }
+                messages.success(request, "Başarılı!")
+                return render(request, "profile.html", context)
+
             context = {
                 "form" : form
             }
@@ -343,6 +352,12 @@ def profile(request):
                 schooladmin.email = email
                 schooladmin.phoneNumber = phoneNumber
                 schooladmin.save()
+                context = {
+                    "form" : form
+                }
+                messages.success(request, "Başarılı")
+                return render(request, "profile.html", context)
+
             context = {
                 "form" : form
             }
@@ -407,10 +422,16 @@ def profile(request):
                 student.email = email
                 student.phoneNumber = phoneNumber
                 student.save()
+                context = {
+                    "form" : form
+                }
+                messages.success(request, "Başarılı")
+                
             context = {
                 "form" : form
             }
             return render(request, "profile.html", context)
+            
         else:
             if student.address == None:
                 dict = {
