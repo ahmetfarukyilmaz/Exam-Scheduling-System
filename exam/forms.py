@@ -3,6 +3,7 @@ from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
+from django.forms import MultipleChoiceField, ChoiceField, Form
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")
@@ -75,8 +76,8 @@ class ExamForm(forms.Form):
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
     date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S')
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
-    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınava girecek sınıflar")
-    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınav yerleri")
+    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
+    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınav yerleri")
     observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözetmen Öğretmen")
     ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin Öğretmeni")
     observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözlemci hoca")
