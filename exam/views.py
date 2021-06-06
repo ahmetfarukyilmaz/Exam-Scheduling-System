@@ -98,8 +98,8 @@ def register(request):
                 messages.success(request,"Başarıyla Kayıt Oldunuz!")
                 return redirect("/schooladmin")
 
-            
-    
+
+
     context = {
         "form" : form
     }
@@ -177,9 +177,32 @@ def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
 def teacher_createExam(request):
-    form = ExamForm(request.POST)
+    form = ExamForm(request.POST or None)
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        date = form.cleaned_data.get('date')
+        duration = form.cleaned_data.get('duration')
+        classes = form.cleaned_data.get('classes')
+        examLocation = form.cleaned_data.get('examLocation')
+        observerTeacher = form.cleaned_data.get('observerTeacher')
+        ownerTeacher = form.cleaned_data.get('ownerTeacher')
+
+        newExam = Exam()
+        newExam.id = 1
+        newExam.name = name
+        newExam.date = date
+        newExam.duration =duration
+        newExam.classes.set(classes)
+        newExam.examLocation.set(examLocation)
+        newExam.observerTeacher.set(observerTeacher)
+        newExam.ownerTeacher.set(ownerTeacher)
+        newExam.save()
+        messages.success(request, "Sınav oluşturuldu!")
+        return redirect("/teacher/")
+
+
     context = {
-        'form' : form
+        "form": form
     }
 
     return render(request, "createExam.html", context)

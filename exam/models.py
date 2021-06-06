@@ -124,7 +124,7 @@ class Teacher(models.Model):
 
 class Exam(models.Model):
     name = models.CharField(max_length = 50)
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now=True)
     duration = models.IntegerField()
     classes = models.ManyToManyField('SchoolClass',related_name='classes')
     examLocation = models.ManyToManyField('SchoolClass',related_name='examLocation')
@@ -137,7 +137,7 @@ class Exam(models.Model):
         db_table = 'Exam'
 
     def __str__(self):
-        return str(self.name + " " + self.date)
+        return str(self.name)
 
 class Schedule(models.Model):
     name = models.CharField(max_length = 50)

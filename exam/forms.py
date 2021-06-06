@@ -73,10 +73,34 @@ class ExamForm(forms.Form):
     name = forms.CharField(max_length=50, label = "Sınav Adı")
     date = forms.DateTimeField(label = "Sınav Tarihi")
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
+    date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S')
+    duration = forms.IntegerField(label = "Sınav süresi(dakika)")
     classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınava girecek sınıflar")
     examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınav yerleri")
     observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözetmen Öğretmen")
     ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin Öğretmeni")
+    observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözlemci hoca")
+    ownerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Dersin hocası")
+
+    def clean(self):
+        name = self.cleaned_data.get("name")
+        date = self.cleaned_data.get("date")
+        duration = self.cleaned_data.get("duration")
+        classes = self.cleaned_data.get("classes")
+        examLocation = self.cleaned_data.get("examLocation")
+        observerTeacher = self.cleaned_data.get("observerTeacher")
+        ownerTeacher = self.cleaned_data.get("ownerTeacher")
+
+
+        values = {
+            "name"  : name,
+            "date"  : date,
+            "duration"    : duration,
+            "classes" : classes,
+            "examLocation": examLocation ,
+            "observerTeacher": observerTeacher,
+            "ownerTeacher": ownerTeacher,
+        }
 
 
 class registerSchoolForm(forms.Form):
@@ -88,6 +112,5 @@ class registerSchoolForm(forms.Form):
     province=forms.CharField(max_length=50,label="İlçe")
     street=forms.CharField(max_length=50,label="Sokak")
     postalCode=forms.CharField(max_length=20,label="Posta Kodu")
-    
 
-    
+
