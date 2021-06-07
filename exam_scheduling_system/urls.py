@@ -15,10 +15,13 @@ Including another URLconf
 """
 from os import name
 from django.conf import settings
+from django.contrib import auth
+from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from exam.views import *
+
 
 
 urlpatterns = [
@@ -27,8 +30,24 @@ urlpatterns = [
     path('login/', loginUser),
     path('logout/', logoutUser),
     path('register/', register),
+
+    path('reset-password/',auth_views.PasswordResetView.
+    as_view(template_name="passwordreset.html"),
+    name="reset_password"),
+
+    path('reset-password-sent/',auth_views.PasswordResetDoneView.
+    as_view(template_name="passwordresetdone.html"),
+    name="password_reset_done"),
+
+    path('reset-password/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.
+    as_view(template_name="passwordresetform.html"),
+    name="password_reset_confirm"),
+
+    path('reset-password-complete/',auth_views.PasswordResetCompleteView.
+    as_view(template_name="passwordresetcomplete.html"),
+    name="password_reset_complete"),
     path('profile/', profile),
-    path('about', about),
+    path('about/', about),
     path('register-school/', registerSchool),
     path('schooladmin/', schooladmin),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),

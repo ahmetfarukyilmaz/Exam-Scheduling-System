@@ -188,7 +188,6 @@ def teacher_createExam(request):
         ownerTeacher = form.cleaned_data.get('ownerTeacher')
 
         newExam = Exam()
-        newExam.id = 1
         newExam.name = name
         newExam.date = date
         newExam.duration =duration
@@ -323,6 +322,8 @@ def profile(request):
                     teacher.save()
                 teacher.name = name
                 teacher.email = email
+                request.user.email=email
+                request.user.save()
                 teacher.phoneNumber = phoneNumber
                 teacher.save()
                 context = {
@@ -387,6 +388,8 @@ def profile(request):
                     schooladmin.save()
                 schooladmin.name = name
                 schooladmin.email = email
+                request.user.email=email
+                request.user.save()
                 schooladmin.phoneNumber = phoneNumber
                 schooladmin.save()
                 context = {
@@ -449,6 +452,8 @@ def profile(request):
                     student.address = address
                     student.save()
                 student.email = email
+                request.user.email = email
+                request.user.save()
                 student.phoneNumber = phoneNumber
                 student.save()
                 context = {
