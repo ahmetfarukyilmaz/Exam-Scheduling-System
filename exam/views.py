@@ -16,6 +16,23 @@ from exam.readStudents import uploadStudents
 
 # Create your views here.
 
+def desk_plan(request):
+    form = DeskPlanForm(request.POST or None)
+    if form.is_valid():
+        context = {
+            "form" : form
+        }
+        print("ldfnsldf")
+        return render(request, "desk_plan.html", context)
+
+    deskplan = [False, True]
+
+    context = {
+        "form" : form,
+        "deskplan" : deskplan
+    }
+    return render(request, "desk_plan.html", context)
+
 def loginUser(request):
     form = LoginForm(request.POST or None)
     context = {

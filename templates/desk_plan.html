@@ -1,0 +1,294 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Oturma Planı
+{% endblock title %}
+
+{%block stylecss %}
+.rectangle {
+    height: 35px;
+    width: 85px;
+    color:white;
+    background-color: rgb(77,77,77);
+    border-radius:7px;
+    text-align:center;
+    vertical-align:middle;
+    justify-content:center;
+    align-items: center;
+  }
+.col-sm{
+    margin: 3px;
+}
+  
+{%endblock stylecss%}
+
+{% block content %}
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="row">
+    <div class="col-4">
+        <h5>Sağdaki örnekten yola çıkarak sıra düzenini belirleyin</h5>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <br>
+            <button type="submit" class="btn btn-primary">Kaydet</button>
+        
+        </form>
+    </div>
+    <div class="col-8">
+
+        {%if deskplan.1%}
+        <h5>Örnek Sıra Düzeni</h5>
+        <hr>
+        <br>
+
+        <div class="row">
+            <div class="col-sm" style="visibility:hidden"><div class="rectangle">
+                <a></a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>7 - 8</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>15 - 16</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>23 - 24</a>
+            </div></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>9 - 10</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>17 - 18</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>25 - 26</a>
+            </div></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>3 - 4</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>11 - 12</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>19 - 20</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>27 - 28</a>
+            </div></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>5 - 6</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>13 - 14</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>21 - 22</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>29 - 30</a>
+            </div></div>
+        </div>
+        <hr>
+        <br>
+        <h6>Sıra Sütunu Sayısı : 4</h6>
+        <h6>Birinci Hizadaki Sıra Sayısı : 3</h6>
+        <h6>İkinci Hizadaki Sıra Sayısı : 4</h6>
+        <h6>Üçüncü Hizadaki Sıra Sayısı : 4</h6>
+        <h6>Dördüncü Hizadaki Sıra Sayısı : 4</h6>
+        <a>* Diğer alanlar boş bırakılmalı</a>
+
+        
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+        {%if deskplan.0%}
+        <div class="row">
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+            <div class="col-sm"><div class="rectangle">
+                <a>1 - 2</a>
+            </div></div>
+        </div>
+        {%endif%}
+
+
+
+    </div>
+</div>
+
+
+
+
+{% endblock content %}

@@ -71,11 +71,10 @@ class SchoolClass(models.Model):
         db_table = 'SchoolClass'
 
     def __str__(self):
-        return self.degree + "-" + self.branch   
+        return self.degree + "-" + self.branch
     
 
     
-
 class School(models.Model):
     name=models.CharField(max_length=100)
     email=models.EmailField(null=True,blank=True)
@@ -147,6 +146,19 @@ class Schedule(models.Model):
 
     class Meta:
         db_table = 'Schedule'
+
+    def __str__(self):
+        return self.name
+
+
+class SittingPlan(models.Model):
+    schedule = ForeignKey('Schedule',on_delete= SET_NULL, null=True, blank=True)
+    student = models.ForeignKey('Student', on_delete = models.SET_NULL, null=True, related_name='student')
+    schoolClass = models.ForeignKey('SchoolClass', on_delete = models.SET_NULL, null=True, related_name='school_class')
+    deskNumber = models.PositiveIntegerField()
+    
+    class Meta:
+        db_table = 'SittingPlan'
 
     def __str__(self):
         return self.name
