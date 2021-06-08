@@ -1,5 +1,5 @@
 {% extends 'layout.html' %} {% block title %} Okul Kaydet {% endblock title %}
-{%block content %} {% load crispy_forms_tags %} {% load static%}
+{%block content %} {% load crispy_forms_tags %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -10,10 +10,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-
-<head>
-  <link rel="stylesheet" href="{% static 'css/style.css'%}" />
-</head>
 
 <div class="row">
   <div class="col-md-6 offset-md-3">

@@ -12,14 +12,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.files.storage import FileSystemStorage
 from django.utils.crypto import get_random_string
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
 #from .examCreatingForms import ExamForm
 
 # Create your views here.
-
 def loginUser(request):
     form = LoginForm(request.POST or None)
     context = {
@@ -490,10 +486,6 @@ def profile(request):
                 "form" : form
             }
             return render(request, "profile.html", context)
-
-    
-
-
     
 
 

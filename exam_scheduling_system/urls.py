@@ -15,17 +15,22 @@ Including another URLconf
 """
 from os import name
 from django.conf import settings
+from django.urls.conf import re_path
+from django.views.static import serve 
 from django.contrib import auth
 from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from exam.views import *
+import django
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
     path('',home,name="index"),
     path('login/', loginUser),
     path('logout/', logoutUser),

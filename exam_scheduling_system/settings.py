@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%+l)els(1@^#8+6o@62z2&*mgqyvo45)yb-_)get^_w5x4jyc*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -118,8 +118,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'exam_scheduling_system/static')]
-
+if DEBUG:
+        STATICFILES_DIRS = [
+            os.path.join(BASE_DIR, 'static')
+       ]
+else:
+        STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
