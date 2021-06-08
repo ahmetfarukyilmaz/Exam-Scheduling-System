@@ -25,6 +25,9 @@
         <form method="post">
             {% csrf_token %}
             {{form|crispy}}
+            <div>
+                <a href="/reset-password/">Şifre Sıfırla</a>
+            </div>
         
             <br>
             <button type="submit" class="btn btn-primary">Giriş Yap</button>

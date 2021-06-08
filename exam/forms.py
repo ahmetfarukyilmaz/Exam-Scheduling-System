@@ -1,8 +1,9 @@
-from exam.models import Teacher, School, SchoolClass, degree_choices,branch_choices, Exam
+from exam.models import *
 from django import forms
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
+from django.forms import MultipleChoiceField, ChoiceField, Form
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")
@@ -39,54 +40,48 @@ class LoginForm(forms.Form):
 class UploadStudentForm(forms.Form):
     degree = forms.ChoiceField(choices=degree_choices)
     branch = forms.ChoiceField(choices = branch_choices)
-    
-    def clean(self):
-        degree = self.cleaned_data.get('degree')
-        branch = self.cleaned_data.get('branch')
-        values ={
-            "degree" : degree,
-            "branch" : branch,
-
-        }
-        return values
 
 class TeacherInfoForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ad Soyad")
     email = forms.EmailField(max_length=100, label="Email")
     phoneNumber = PhoneNumberField(label="Telefon")
-    country=forms.CharField(max_length=50)
-    city=forms.CharField(max_length=50)
-    province=forms.CharField(max_length=50)
-    street=forms.CharField(max_length=50)
-    postalCode=forms.CharField(max_length=20)
+    country=forms.CharField(max_length=50,label="Ülke")
+    city=forms.CharField(max_length=50,label="Şehir")
+    province=forms.CharField(max_length=50,label="İlçe")
+    street=forms.CharField(max_length=50,label="Sokak")
+    postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 class SchoolAdminInfoForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ad Soyad")
     email = forms.EmailField(max_length=100, label="Email")
     phoneNumber = PhoneNumberField(label="Telefon")
-    country=forms.CharField(max_length=50)
-    city=forms.CharField(max_length=50)
-    province=forms.CharField(max_length=50)
-    street=forms.CharField(max_length=50)
-    postalCode=forms.CharField(max_length=20)
+    country=forms.CharField(max_length=50,label="Ülke")
+    city=forms.CharField(max_length=50,label="Şehir")
+    province=forms.CharField(max_length=50,label="İlçe")
+    street=forms.CharField(max_length=50,label="Sokak")
+    postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 class StudentInfoForm(forms.Form):
     email = forms.EmailField(max_length=100, label="Email")
     phoneNumber = PhoneNumberField(label="Telefon")
-    country=forms.CharField(max_length=50)
-    city=forms.CharField(max_length=50)
-    province=forms.CharField(max_length=50)
-    street=forms.CharField(max_length=50)
-    postalCode=forms.CharField(max_length=20)
+    country=forms.CharField(max_length=50,label="Ülke")
+    city=forms.CharField(max_length=50,label="Şehir")
+    province=forms.CharField(max_length=50,label="İlçe")
+    street=forms.CharField(max_length=50,label="Sokak")
+    postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 class ExamForm(forms.Form):
     name = forms.CharField(max_length=50, label = "Sınav Adı")
     date = forms.DateTimeField(label = "Sınav Tarihi")
+    duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
+    date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S')
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
-    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınava girecek sınıflar")
-    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), label = "Sınav yerleri")
+    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
+    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınav yerleri")
+    observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözetmen Öğretmen")
+    ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin Öğretmeni")
     observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözlemci hoca")
-    ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin hocası")
+    ownerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Dersin hocası")
 
     def clean(self):
         name = self.cleaned_data.get("name")
@@ -109,8 +104,15 @@ class ExamForm(forms.Form):
         }
 
 
-        return values
-
+class registerSchoolForm(forms.Form):
+    schoolName = forms.CharField(max_length=100,label="Okul İsmi")
+    email=forms.EmailField(label="Email")
+    phoneNumber = PhoneNumberField(label="Telefon")
+    country=forms.CharField(max_length=50,label="Ülke")
+    city=forms.CharField(max_length=50,label="Şehir")
+    province=forms.CharField(max_length=50,label="İlçe")
+    street=forms.CharField(max_length=50,label="Sokak")
+    postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 
 class DeskPlanForm(forms.Form):

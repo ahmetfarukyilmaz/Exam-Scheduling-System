@@ -1,10 +1,16 @@
 {% extends 'layout.html' %} {% block title %} Upload {% endblock title %}
-{%block content %} {% load crispy_forms_tags %} {% load static%}
-
-<head>
-  <link rel="stylesheet" href="{% static 'css/style.css'%}" />
-</head>
-
+{%block content %}
+ {% load crispy_forms_tags %}
+{% if messages%}
+<ul class="messages">
+  {% for message in messages %}
+  <div {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %}>
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+    {{ message }}
+  </div>
+  {% endfor %}
+</ul>
+{% endif %}
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <br />
@@ -12,13 +18,13 @@
     <hr />
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %} {{form|crispy}}
-      
-      <input type="file" name="document"/>
+
+      <input type="file" name="document" />
       <button type="submit" class="btn btn-primary">
         Öğrenci Listesi Yükle
       </button>
     </form>
-    <div></div>
-    {% endblock content %}
   </div>
 </div>
+    {% endblock content %}
+

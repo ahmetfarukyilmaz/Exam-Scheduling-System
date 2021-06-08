@@ -4,14 +4,15 @@ import os
 from numpy.lib.function_base import extract
 import pandas as pd
 from exam.models import *
+from exam.sql import *
+from exam.functions import *
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-from django.core.files.storage import FileSystemStorage
-from exam.readStudents import uploadStudents
+from django.utils.crypto import get_random_string
 #from .examCreatingForms import ExamForm
 
 # Create your views here.
@@ -76,6 +77,13 @@ def register(request):
             accessKey  = form.cleaned_data.get('accessKey')
             school = form.cleaned_data.get('school')
 
+            if User.objects.filter(username=username).exists():
+                context = {
+                "form" : form
+                }
+                messages.warning(request, "Bu Kullanıcı Adı Mevcut")
+                return render(request, "register.html", context)
+        
             if school.adminAccessKey != accessKey and school.teacherAccessKey != accessKey:
                 context = {
                 "form" : form
@@ -104,8 +112,8 @@ def register(request):
                 messages.success(request,"Başarıyla Kayıt Oldunuz!")
                 return redirect("/schooladmin")
 
-            
-    
+
+
     context = {
         "form" : form
     }
@@ -173,9 +181,6 @@ def student_viewExamDetails(request):
 def student_changePassword(request):
     return HttpResponse('Öğrenci şifre değiştirme')
 
-def schooladmin_uploadStudentList(request):
-    return HttpResponse('Öğrenci Listesi yükleme')
-
 def schooladmin_createSchedule(request):
     return HttpResponse('Sınav takvimi oluşturma')
 
@@ -186,15 +191,61 @@ def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
 def teacher_createExam(request):
-    form = ExamForm(request.POST)
+    form = ExamForm(request.POST or None)
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        date = form.cleaned_data.get('date')
+        duration = form.cleaned_data.get('duration')
+        classes = form.cleaned_data.get('classes')
+        examLocation = form.cleaned_data.get('examLocation')
+        observerTeacher = form.cleaned_data.get('observerTeacher')
+        ownerTeacher = form.cleaned_data.get('ownerTeacher')
+
+        newExam = Exam()
+        newExam.name = name
+        newExam.date = date
+        newExam.duration =duration
+        newExam.classes.set(classes)
+        newExam.examLocation.set(examLocation)
+        newExam.observerTeacher.set(observerTeacher)
+        newExam.ownerTeacher.set(ownerTeacher)
+        newExam.save()
+        messages.success(request, "Sınav oluşturuldu!")
+        return redirect("/teacher/")
+
+
     context = {
-        'form' : form
+        "form": form
     }
 
     return render(request, "createExam.html", context)
 
-def checkout(request):
-    return render(request, "checkout.html")
+def registerSchool(request):
+    form = registerSchoolForm(request.POST or None)
+    if form.is_valid():
+        schoolName = form.cleaned_data.get('schoolName')
+        email = form.cleaned_data.get('email')
+        phoneNumber = form.cleaned_data.get('phoneNumber')
+        country = form.cleaned_data.get('country')
+        city = form.cleaned_data.get('city')
+        province = form.cleaned_data.get('province')
+        street = form.cleaned_data.get('street')
+        postalCode = form.cleaned_data.get('postalCode')
+        address = Address()
+        setAddress(address,country,city,province,street,postalCode)
+        address.save()
+        newSchool = School()
+        adminAccessKey=get_random_string(length=18)
+        teacherAccessKey=get_random_string(length=18)
+        setSchool(newSchool,schoolName,address,email,phoneNumber,adminAccessKey,teacherAccessKey)
+        newSchool.save()
+        mail_sender(email,teacherAccessKey,adminAccessKey)
+        messages.success(request,'Okul Kaydetme Başarılı. Mail adresinize gelen erişim anahtarları ile sisteme kayıt olabilirsiniz.')
+        return redirect('/register-school/')
+    context = {
+        'form': form
+    }
+    return render(request, "registerschool.html",context)
 
 def about(request):
     return render(request, "about.html")
@@ -204,7 +255,6 @@ def schooladmin_uploadStudentList(request):
     form = UploadStudentForm(request.POST or None)
     currentAdmin = SchoolAdministrator.objects.filter(user_id=request.user.id).first()
     if form.is_valid():
-
         degree = form.cleaned_data.get('degree')
         branch = form.cleaned_data.get('branch')
         if not SchoolClass.objects.filter(school_id=currentAdmin.school.id ,degree=degree ,branch=branch).first():
@@ -216,11 +266,7 @@ def schooladmin_uploadStudentList(request):
         else:
             newClass=SchoolClass.objects.get(school_id=currentAdmin.school.id,degree=degree,branch=branch)
 
-        uploaded_file = request.FILES['document']
-        fs = FileSystemStorage()
-        fs.save(uploaded_file.name,uploaded_file)
-        base_dir = settings.MEDIA_ROOT
-        studentList = pd.read_excel(os.path.join(base_dir,str(uploaded_file.name)),header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
+        studentList = read_student_list(request)
 
         for i in range(len(studentList)):
             if type(studentList.values[i][0])!=int:
@@ -240,8 +286,11 @@ def schooladmin_uploadStudentList(request):
             newStudent.school = currentAdmin.school
             newStudent.schoolClass = newClass
             newStudent.save()
+            print(str(newStudent.schoolNumber) + " " + newStudent.name)
+            
 
-
+        messages.success(request,degree+ "-" + branch + " sınıf listesi başarıyla yüklendi.")
+        return redirect("/schooladmin/upload-student-list/")
     context = {
         "form" : form
     }
@@ -277,24 +326,18 @@ def profile(request):
                 postalCode = form.cleaned_data.get('postalCode')
                 if teacher.address != None:
                     address = teacher.address
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                 else:
                     address = Address()
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                     teacher.address = address
                     teacher.save()
                 teacher.name = name
                 teacher.email = email
+                request.user.email=email
+                request.user.save()
                 teacher.phoneNumber = phoneNumber
                 teacher.save()
                 context = {
@@ -349,24 +392,18 @@ def profile(request):
                 postalCode = form.cleaned_data.get('postalCode')
                 if schooladmin.address != None:
                     address = schooladmin.address
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                 else:
                     address = Address()
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                     schooladmin.address = address
                     schooladmin.save()
                 schooladmin.name = name
                 schooladmin.email = email
+                request.user.email=email
+                request.user.save()
                 schooladmin.phoneNumber = phoneNumber
                 schooladmin.save()
                 context = {
@@ -420,23 +457,17 @@ def profile(request):
                 postalCode = form.cleaned_data.get('postalCode')
                 if student.address != None:
                     address = student.address
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                 else:
                     address = Address()
-                    address.country = country
-                    address.city = city
-                    address.province = province
-                    address.street = street
-                    address.postalCode = postalCode
+                    setAddress(address,country,city,province,street,postalCode)
                     address.save()
                     student.address = address
                     student.save()
                 student.email = email
+                request.user.email = email
+                request.user.save()
                 student.phoneNumber = phoneNumber
                 student.save()
                 context = {
@@ -473,10 +504,6 @@ def profile(request):
                 "form" : form
             }
             return render(request, "profile.html", context)
-
-    
-
-
     
 
 

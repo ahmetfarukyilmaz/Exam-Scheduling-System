@@ -15,22 +15,48 @@ Including another URLconf
 """
 from os import name
 from django.conf import settings
+from django.urls.conf import re_path
+from django.views.static import serve 
+from django.contrib import auth
+from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from exam.views import *
+import django
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
+    re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
     path('',home,name="index"),
     path('login/', loginUser),
     path('logout/', logoutUser),
     path('register/', register),
-    path('checkout/', checkout),
-    path('about', about),
-    #path('upload',upload,name='upload'),
+
+    path('reset-password/',auth_views.PasswordResetView.
+    as_view(template_name="passwordreset.html"),
+    name="reset_password"),
+
+    path('reset-password-sent/',auth_views.PasswordResetDoneView.
+    as_view(template_name="passwordresetdone.html"),
+    name="password_reset_done"),
+
+    path('reset-password/<uidb64>/<token>/',auth_views.PasswordResetConfirmView.
+    as_view(template_name="passwordresetform.html"),
+    name="password_reset_confirm"),
+
+    path('reset-password-complete/',auth_views.PasswordResetCompleteView.
+    as_view(template_name="passwordresetcomplete.html"),
+    name="password_reset_complete"),
+    path('profile/', profile),
+    path('about/', about),
+    path('register-school/', registerSchool),
+    path('schooladmin/', schooladmin),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
+    path('schooladmin/create-schedule/', schooladmin_createSchedule),
     path('student/', student),
     path('student/view-exam-details/', student_viewExamDetails),
     path('student/change-password/', student_changePassword),

@@ -1,6 +1,7 @@
 asgiref==3.3.4
 Cython==0.29.23
 Django==3.2.3
+django-bootstrap-themes==3.3.6
 django-crispy-forms==1.11.2
 django-phonenumber-field==5.1.0
 numpy==1.21.0rc1
