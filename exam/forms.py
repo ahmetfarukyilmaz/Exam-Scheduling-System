@@ -4,6 +4,7 @@ from django.forms import ModelForm
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 from django.forms import MultipleChoiceField, ChoiceField, Form
+from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")
@@ -74,14 +75,14 @@ class ExamForm(forms.Form):
     name = forms.CharField(max_length=50, label = "Sınav Adı")
     date = forms.DateTimeField(label = "Sınav Tarihi")
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
-    date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S')
+    date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
+        'sideBySide' : True}))
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
-    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
-    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(), widget=forms.CheckboxSelectMultiple, label = "Sınav yerleri")
-    observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözetmen Öğretmen")
-    ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(), label = "Dersin Öğretmeni")
-    observerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Gözlemci hoca")
-    ownerTeacher = forms.ModelMultipleChoiceField(Teacher.objects.all(), label = "Dersin hocası")
+    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(),  widget = forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
+    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(),  widget = forms.CheckboxSelectMultiple,  label = "Sınav yerleri")
+    observerTeacher = forms.ModelChoiceField(Teacher.objects.all(),  label = "Gözetmen Öğretmen")
+    #ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(),  label = "Dersin Öğretmeni")
+
 
     def clean(self):
         name = self.cleaned_data.get("name")
