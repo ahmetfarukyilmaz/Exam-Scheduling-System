@@ -200,4 +200,17 @@ class DeskPlanForm(forms.Form):
 
 
 
+class ScheduleForm(forms.Form):
+    def __init__(self, examChoices, *args, **kwargs):
+        super(ScheduleForm, self).__init__(*args, **kwargs)
+        self.fields['exams'].choices = examChoices
+
+    name = forms.CharField(max_length=100,label="Takvim İsmi", required = True)
+    exams = forms.MultipleChoiceField(choices=[], label = "Sınavlar", required= True)
+    start_date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
+        'sideBySide' : True}))
+    end_date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
+        'sideBySide' : True}))
+
+
 

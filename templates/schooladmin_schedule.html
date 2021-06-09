@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block title %}
+    Takvimler
+{% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>Takvimler</h3>
+      <br>
+    </div>
+    <div class="col">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">Takvim Oluştur</button>
+      <br>
+    </div>
+  </div>
+  <div class="row" style="margin-top:20px">
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Takvim Adı</th>
+          <th scope="col">Başlangıç Tarihi</th>
+          <th scope="col">Bitiş Tarihi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in schedules %}
+        <tr>
+          <th scope="row"></th>
+          <td>{{item.name}}</td>
+          <td>{{item.start_date}}</td>
+          <td>{{item.end_date}}</td>
+          <td><a href="detail/{{item.id}}" class="btn btn-info">Detay</a></td>
+        </tr>
+        {% endfor %}
+  
+    </table>
+  </div>
+</div>
+
+
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Yeni Takvim</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          {{form|crispy}}
+      
+          <br>
+          <button type="button" class="btn btn-primary">Oluştur</button>
+      
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock content %}

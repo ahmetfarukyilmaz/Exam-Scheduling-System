@@ -50,6 +50,7 @@ def loginUser(request):
 
         user = authenticate(username = username, password = password)
         if user is None:
+            messages.warning(request, "Kullanıcı adı veya şifre hatalı!")
             return render(request,"login.html",context)
         
         login(request, user)
@@ -63,10 +64,13 @@ def loginUser(request):
             schooladmin = None
 
         if teacher is not None:
+            messages.success(request, "Giriş Başarılı")
             return redirect("/teacher/")
         elif schooladmin is not None:
+            messages.success(request, "Giriş Başarılı")
             return redirect("/schooladmin/")
         else:
+            messages.success(request, "Giriş Başarılı")
             return redirect("/student/")
 
         
@@ -185,8 +189,29 @@ def student_viewExamDetails(request):
 def student_changePassword(request):
     return HttpResponse('Öğrenci şifre değiştirme')
 
-def schooladmin_createSchedule(request):
-    return HttpResponse('Sınav takvimi oluşturma')
+def schooladmin_schedule(request):
+    currentAdmin = SchoolAdministrator.objects.get(user_id = request.user.id)
+    schedules = Schedule.objects.filter(school_id = currentAdmin.school_id)
+    allexams = Exam.objects.all()
+    exams = []
+    for exam in allexams:
+        if exam.ownerTeacher.school_id == currentAdmin.school_id:
+            exams.append((exam.id, exam.name))
+
+    form = ScheduleForm(exams)
+    context = {
+        "schedules" : schedules,
+        "form" : form
+    }
+    return render(request, "schooladmin_schedule.html", context)
+
+    
+def schooladmin_schedule_detail(request, id):
+    schedule = Schedule.objects.get(id = id)
+    context = {
+        "schedule" : schedule
+    }
+    return render(request, "schooladmin_schedule_details.html", context)
 
 def teacher_changeExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı değiştirme')

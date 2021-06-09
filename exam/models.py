@@ -139,6 +139,7 @@ class Exam(models.Model):
         return str(self.name)
 
 class Schedule(models.Model):
+    school = models.ForeignKey('School',on_delete=CASCADE,null=True,blank=True)
     name = models.CharField(max_length = 50)
     administrator = models.ForeignKey('SchoolAdministrator', on_delete =CASCADE)
     start_date = models.DateTimeField()
