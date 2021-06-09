@@ -26,13 +26,16 @@ def desk_plan(request):
         print("ldfnsldf")
         return render(request, "desk_plan.html", context)
 
-    deskplan = [False, True]
-
     context = {
-        "form" : form,
-        "deskplan" : deskplan
+        "form" : form
     }
     return render(request, "desk_plan.html", context)
+
+def sitting_plan(request):
+    context = {
+
+    }
+    return render(request, "sittingPlan.html", context)
 
 def loginUser(request):
     form = LoginForm(request.POST or None)

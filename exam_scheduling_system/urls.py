@@ -68,6 +68,7 @@ urlpatterns = [
     path('schooladmin/create-schedule/', schooladmin_createSchedule),
     path('profile/', profile),
     path('desk_plan/', desk_plan),
+    path('sitting_plan/', sitting_plan),
     
 
 
