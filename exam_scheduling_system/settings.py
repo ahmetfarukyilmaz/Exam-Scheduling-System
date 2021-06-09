@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'exam',
     'phonenumber_field',
+    'tempus_dominus',
+    'datetimewidget',
 ]
 
 MIDDLEWARE = [

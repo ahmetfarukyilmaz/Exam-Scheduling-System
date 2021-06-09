@@ -5,6 +5,7 @@
 {% endblock title %}
 
 {% block content %}
+    {% load crispy_forms_tags %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

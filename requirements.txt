@@ -3,7 +3,9 @@ Cython==0.29.23
 Django==3.2.3
 django-bootstrap-themes==3.3.6
 django-crispy-forms==1.11.2
+django-datetime-widget2==0.9.5
 django-phonenumber-field==5.1.0
+django-tempus-dominus==5.1.2.14
 numpy==1.21.0rc1
 pandas==1.2.4
 phonenumbers==8.12.24

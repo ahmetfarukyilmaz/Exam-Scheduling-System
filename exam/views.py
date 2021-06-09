@@ -14,6 +14,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.utils.crypto import get_random_string
 #from .examCreatingForms import ExamForm
+from django.views.generic.edit import FormView
 
 # Create your views here.
 
@@ -193,6 +194,7 @@ def teacher_changeExamDetails(request):
 def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
+
 def teacher_createExam(request):
     form = ExamForm(request.POST or None)
     if form.is_valid():
@@ -202,17 +204,26 @@ def teacher_createExam(request):
         classes = form.cleaned_data.get('classes')
         examLocation = form.cleaned_data.get('examLocation')
         observerTeacher = form.cleaned_data.get('observerTeacher')
-        ownerTeacher = form.cleaned_data.get('ownerTeacher')
+        #ownerTeacher = form.cleaned_data.get('ownerTeacher')
+        currentTeacher = Teacher.objects.filter(user_id=request.user.id).first()
+
 
         newExam = Exam()
         newExam.name = name
         newExam.date = date
         newExam.duration =duration
-        newExam.classes.set(classes)
-        newExam.examLocation.set(examLocation)
-        newExam.observerTeacher.set(observerTeacher)
-        newExam.ownerTeacher.set(ownerTeacher)
+        newExam.observerTeacher = observerTeacher
+        newExam.ownerTeacher = currentTeacher
+
         newExam.save()
+        for singleClass in classes:
+            newExam.classes.add(singleClass)
+        #newExam.classes.add(classes)
+        for singleExamLocation in examLocation:
+            newExam.examLocation.add(singleExamLocation)
+
+
+
         messages.success(request, "Sınav oluşturuldu!")
         return redirect("/teacher/")
 
