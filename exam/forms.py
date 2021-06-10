@@ -72,16 +72,23 @@ class StudentInfoForm(forms.Form):
     postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 class ExamForm(forms.Form):
+    def __init__(self, class_choices, teacher_choices, *args, **kwargs):
+        super(ExamForm, self).__init__(*args, **kwargs)
+        self.fields['classes'].choices = class_choices
+        self.fields['examLocation'].choices = class_choices
+        self.fields['observerTeacher'].choices = teacher_choices
+
+
+
     name = forms.CharField(max_length=50, label = "Sınav Adı")
     date = forms.DateTimeField(label = "Sınav Tarihi")
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
     date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
         'sideBySide' : True}))
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
-    classes = forms.ModelMultipleChoiceField(SchoolClass.objects.all(),  widget = forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
-    examLocation = forms.ModelMultipleChoiceField(SchoolClass.objects.all(),  widget = forms.CheckboxSelectMultiple,  label = "Sınav yerleri")
-    observerTeacher = forms.ModelChoiceField(Teacher.objects.all(),  label = "Gözetmen Öğretmen")
-    #ownerTeacher = forms.ModelChoiceField(Teacher.objects.all(),  label = "Dersin Öğretmeni")
+    classes = forms.MultipleChoiceField(choices=(), widget = forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
+    examLocation = forms.MultipleChoiceField(choices=(), widget = forms.CheckboxSelectMultiple,  label = "Sınav yerleri")
+    observerTeacher = forms.ChoiceField(choices=(), label = "Gözetmen Öğretmen")
 
 
     def clean(self):

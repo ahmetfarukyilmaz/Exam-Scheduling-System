@@ -221,17 +221,34 @@ def teacher_viewExamDetails(request):
 
 
 def teacher_createExam(request):
-    form = ExamForm(request.POST or None)
+
+    currentTeacher = Teacher.objects.filter(user_id=request.user.id).first()
+    allClasses = SchoolClass.objects.all()
+    allTeachers = Teacher.objects.all()
+    class_list = []
+    teacher_list = []
+
+    for singleClass in allClasses:
+        if(singleClass.school_id == currentTeacher.school_id):
+              class_list.append((singleClass.id, singleClass.degree + "/" +  singleClass.branch))
+
+    for singleTeacher in allTeachers:
+        if(singleTeacher.school_id == currentTeacher.school_id):
+            teacher_list.append((singleTeacher, singleTeacher.name))
+
+
+    form= ExamForm(class_list, teacher_list, request.POST or None)
     if form.is_valid():
         name = form.cleaned_data.get('name')
         date = form.cleaned_data.get('date')
         duration = form.cleaned_data.get('duration')
         classes = form.cleaned_data.get('classes')
         examLocation = form.cleaned_data.get('examLocation')
-        observerTeacher = form.cleaned_data.get('observerTeacher')
-        #ownerTeacher = form.cleaned_data.get('ownerTeacher')
-        currentTeacher = Teacher.objects.filter(user_id=request.user.id).first()
+        observerTeacherName = form.cleaned_data.get('observerTeacher')
 
+        for teacher in allTeachers:
+            if(observerTeacherName == teacher.name):
+                observerTeacher = teacher
 
         newExam = Exam()
         newExam.name = name
@@ -239,19 +256,17 @@ def teacher_createExam(request):
         newExam.duration =duration
         newExam.observerTeacher = observerTeacher
         newExam.ownerTeacher = currentTeacher
-
         newExam.save()
+
+
         for singleClass in classes:
             newExam.classes.add(singleClass)
-        #newExam.classes.add(classes)
+
         for singleExamLocation in examLocation:
             newExam.examLocation.add(singleExamLocation)
 
-
-
         messages.success(request, "Sınav oluşturuldu!")
         return redirect("/teacher/")
-
 
     context = {
         "form": form
