@@ -3,13 +3,13 @@
 {% block title %}
     Kayıt Ol
 {% endblock title %}
-
+{% load static %}
 {% block content %}
     {% load crispy_forms_tags %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
-    <div {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+    <div {% if message.tags %} id="msg" class="alert alert-{{ message.tags }}"{% endif %}>
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
         {{ message }}
     </div>
@@ -31,5 +31,7 @@
         </form>
     </div>
 </div>
+
+
 
 {% endblock content %}
