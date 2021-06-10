@@ -137,7 +137,7 @@ def logoutUser(request):
 
 
 def home(request):
-    return render(request, "homepage.html")
+    return render(request, "index.html")
 
 
 
