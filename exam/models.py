@@ -50,7 +50,7 @@ class Student(models.Model):
     exams = models.ManyToManyField('Exam',blank=True)
     phoneNumber = PhoneNumberField(null=True,blank=True)
     address = models.OneToOneField('Address', on_delete=SET_NULL,null=True,blank=True)
-
+    
     class Meta:
         db_table = 'Student'
 
@@ -66,6 +66,7 @@ class SchoolClass(models.Model):
     deskPlan = models.TextField(null=True,blank=True)
     floor = models.IntegerField(null=True,blank=True)
     representative = models.OneToOneField('Student', on_delete = SET_NULL,null=True,blank=True)
+    numberOfStudents = models.IntegerField(null=True,blank=True,default=0)
 
     class Meta:
         db_table = 'SchoolClass'

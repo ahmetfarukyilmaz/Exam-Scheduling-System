@@ -1,6 +1,23 @@
 {% extends 'layout.html' %} {% block title %} Upload {% endblock title %}
 {%block content %}
  {% load crispy_forms_tags %}
+ <head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(
+    function(){
+        $('input:file').change(
+            function(){
+                if ($(this).val()) {
+                    $('button:submit').attr('disabled',false);
+                    // or, as has been pointed out elsewhere:
+                    // $('input:submit').removeAttr('disabled'); 
+                } 
+            }
+            );
+    });
+</script>
+</head>
 {% if messages%}
 <ul class="messages">
   {% for message in messages %}
@@ -20,11 +37,12 @@
       {% csrf_token %} {{form|crispy}}
 
       <input type="file" name="document" />
-      <button type="submit" class="btn btn-primary">
+      <button type="submit" class="btn btn-primary" disabled>
         Öğrenci Listesi Yükle
       </button>
     </form>
   </div>
 </div>
+
     {% endblock content %}
 

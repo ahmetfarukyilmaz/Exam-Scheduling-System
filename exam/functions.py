@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import pandas as pd
+from exam.models import *
 
 
 def mail_sender(email,teacherAccessKey,adminAccessKey):
@@ -21,3 +22,12 @@ def read_student_list(request):
     base_dir = settings.MEDIA_ROOT
     return pd.read_excel(os.path.join(base_dir,str(uploaded_file.name)),
         header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
+
+
+def cheatingAlgorithm(request,schedule):
+    classes = Exam.object.filter(schedule_id=schedule.id)
+    totalNumberOfStudents = 0;
+    for exam in exams:
+        totalNumberOfStudents+=exam
+
+    pass

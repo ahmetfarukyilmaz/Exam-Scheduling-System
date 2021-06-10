@@ -29,13 +29,19 @@ import django
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    #STATIC PATHS
     re_path(r'^media/(?P<path>.*)$', serve,{'document_root': settings.MEDIA_ROOT}), 
     re_path(r'^static/(?P<path>.*)$', serve,{'document_root': settings.STATIC_ROOT}), 
+
     path('',home,name="index"),
+
+    #AUTHENTICATION PATHS
     path('login/', loginUser),
     path('logout/', logoutUser),
     path('register/', register),
 
+    #PASSWORD RESET PATHS
     path('reset-password/',auth_views.PasswordResetView.
     as_view(template_name="passwordreset.html"),
     name="reset_password"),
@@ -51,22 +57,33 @@ urlpatterns = [
     path('reset-password-complete/',auth_views.PasswordResetCompleteView.
     as_view(template_name="passwordresetcomplete.html"),
     name="password_reset_complete"),
+
+    #PROFILE EDIT PATH
     path('profile/', profile),
+
     path('about/', about),
+
     path('register-school/', registerSchool),
+
+    #SCHOOL ADMIN PATHS
     path('schooladmin/', schooladmin),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
     path('schooladmin/schedule/', schooladmin_schedule),
     path('schooladmin/schedule/detail/<int:id>', schooladmin_schedule_detail),
+
+    #STUDENT PATHS
     path('student/', student),
     path('student/view-exam-details/', student_viewExamDetails),
     path('student/change-password/', student_changePassword),
+
+    #TEACHER PATHS
     path('teacher/', teacher),
     path('teacher/change-exam-details/', teacher_changeExamDetails),
     path('teacher/view-exam-details/', teacher_viewExamDetails),
     path('teacher/create-exam/', teacher_createExam),
-    path('schooladmin/', schooladmin),
-    path('profile/', profile),
+
+    
+    
     path('desk_plan/', desk_plan),
     path('sitting_plan/', sitting_plan),
     

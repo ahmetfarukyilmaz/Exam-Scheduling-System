@@ -1,3 +1,4 @@
+from django.db.models import query
 from exam.models import *
 from django import forms
 from django.forms import ModelForm
@@ -72,22 +73,25 @@ class StudentInfoForm(forms.Form):
     postalCode=forms.CharField(max_length=20,label="Posta Kodu")
 
 class ExamForm(forms.Form):
-    def __init__(self, class_choices, teacher_choices, *args, **kwargs):
+    def __init__(self, teacher_choices,teacher, *args, **kwargs):
         super(ExamForm, self).__init__(*args, **kwargs)
-        self.fields['classes'].choices = class_choices
-        self.fields['examLocation'].choices = class_choices
+        self.fields['classes'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id)
+        self.fields['examLocation'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id)
         self.fields['observerTeacher'].choices = teacher_choices
+        
 
 
 
     name = forms.CharField(max_length=50, label = "Sınav Adı")
     date = forms.DateTimeField(label = "Sınav Tarihi")
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
-    date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
-        'sideBySide' : True}))
+    date = forms.DateTimeField(label = "Sınav Tarihi",
+    input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={'sideBySide' : True}))
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
-    classes = forms.MultipleChoiceField(choices=(), widget = forms.CheckboxSelectMultiple, label = "Sınava girecek sınıflar")
-    examLocation = forms.MultipleChoiceField(choices=(), widget = forms.CheckboxSelectMultiple,  label = "Sınav yerleri")
+    classes = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
+    label = "Sınava girecek sınıflar")
+    examLocation = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
+    label = "Sınav yerleri")
     observerTeacher = forms.ChoiceField(choices=(), label = "Gözetmen Öğretmen")
 
 
@@ -110,6 +114,7 @@ class ExamForm(forms.Form):
             "observerTeacher": observerTeacher,
             "ownerTeacher": ownerTeacher,
         }
+        return values
 
 
 class registerSchoolForm(forms.Form):

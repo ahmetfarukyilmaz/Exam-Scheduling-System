@@ -237,7 +237,7 @@ def teacher_createExam(request):
             teacher_list.append((singleTeacher, singleTeacher.name))
 
 
-    form= ExamForm(class_list, teacher_list, request.POST or None)
+    form= ExamForm(teacher_list, currentTeacher,request.POST or None)
     if form.is_valid():
         name = form.cleaned_data.get('name')
         date = form.cleaned_data.get('date')
@@ -258,12 +258,21 @@ def teacher_createExam(request):
         newExam.ownerTeacher = currentTeacher
         newExam.save()
 
-
+        #cheatingAlgorithm(request,newExam)
         for singleClass in classes:
             newExam.classes.add(singleClass)
+            print(singleClass)
+            students = Student.objects.filter(schoolClass_id=singleClass.id)
+            for student in students :
+                student.exams.add(newExam)
+
 
         for singleExamLocation in examLocation:
             newExam.examLocation.add(singleExamLocation)
+
+
+
+        
 
         messages.success(request, "Sınav oluşturuldu!")
         return redirect("/teacher/")
@@ -340,9 +349,10 @@ def schooladmin_uploadStudentList(request):
             newStudent.school = currentAdmin.school
             newStudent.schoolClass = newClass
             newStudent.save()
+            newClass.numberOfStudents+=1
             print(str(newStudent.schoolNumber) + " " + newStudent.name)
-            
-
+            print(newClass.numberOfStudents)
+        newClass.save()
         messages.success(request,degree+ "-" + branch + " sınıf listesi başarıyla yüklendi.")
         return redirect("/schooladmin/upload-student-list/")
     context = {
