@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from exam.views import *
+from exam.functions import *
 import django
 
 
@@ -86,6 +87,8 @@ urlpatterns = [
     
     path('desk_plan/', desk_plan),
     path('sitting_plan/', sitting_plan),
+
+    path('sql/',cheatingAlgorithm)
     
 
 

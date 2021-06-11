@@ -258,7 +258,6 @@ def teacher_createExam(request):
         newExam.ownerTeacher = currentTeacher
         newExam.save()
 
-        #cheatingAlgorithm(request,newExam)
         for singleClass in classes:
             newExam.classes.add(singleClass)
             print(singleClass)
