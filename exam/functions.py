@@ -18,6 +18,28 @@ def mail_sender(email,teacherAccessKey,adminAccessKey):
     template,settings.EMAIL_HOST_USER,
     [str(email)],fail_silently=False)
 
+
+
+def mail_sender_exam(request):
+    # SCHEDULE ID ATTRIBUTE WILL BE PROVIDED AS A PARAMETER
+    students = Student.objects.distinct().filter(exams__schedule_id=100)
+    for student in students:
+        email=User.objects.get(id=student.user_id).email
+        #schedule will get it as a parameter
+        schedule = Schedule.objects.get(pk=100)
+        exams = student.exams.filter(schedule_id=100)
+        template = render_to_string('emailexam.html',
+        {'exams':exams,
+        'schedule':schedule})
+        send_mail('Sınav Bilgilendirme',
+        template,settings.EMAIL_HOST_USER,
+        [email],fail_silently=False)
+        if email:
+            print(student.name + " öğrencisine mail gönderildi")
+    return render(request,"emailexam.html",{'examName':"selam"})
+    
+
+
 def read_student_list(request):
     uploaded_file = request.FILES['document']
     fs = FileSystemStorage()
@@ -37,7 +59,6 @@ def cheatingAlgorithm(request):
     numberOfClasses = classes.count()
     print("Öğrenci sayısı:" + str(numberofStudents))
     print("Sınıf sayısı:" + str(numberOfClasses))
-    
     nineGrades=students.filter(schoolClass__degree=9).order_by('?')
     nineGradesCount = nineGrades.count()
     tenGrades = students.filter(schoolClass__degree=10).order_by('?')
@@ -53,12 +74,7 @@ def cheatingAlgorithm(request):
     print("10. sınıf: " + str(tenGradesCount))
     print("11. sınıf: " + str(elevenGradesCount))
     print("12. sınıf: "+  str(twelveGradesCount))
-    nine=0
-    ten=0
-    eleven=0
-    twelve=0
-    c = 0 ;
-    perDesk = 4
+    nine,ten,eleven,twelve,c,perDesk=0,0,0,0,0,4
     for schoolClass in classes:
         for x in range(40):
             if nine==nineGradesCount or ten==tenGradesCount or eleven==elevenGradesCount or twelve==twelveGradesCount:
@@ -74,10 +90,6 @@ def cheatingAlgorithm(request):
                 sittingplan.save()
                 c+=1
                 print("Başarılı " + str(c))
-                
-            
-                
-            
             elif x%perDesk==1 and ten<tenGradesCount:
                 sittingplan.student=tenGrades[ten]
                 sittingplan.deskNumber=x+1
@@ -85,39 +97,19 @@ def cheatingAlgorithm(request):
                 sittingplan.save()
                 c+=1
                 print("Başarılı " + str(c))
-                
-            
-            
             elif x%perDesk==2 and eleven<elevenGradesCount:
                 sittingplan.student=elevenGrades[eleven]
                 sittingplan.deskNumber=x+1
                 eleven+=1
                 sittingplan.save()
                 c+=1
-                print("Başarılı " + str(c))
-                
-            
-            
+                print("Başarılı " + str(c))  
             elif x%perDesk==3 and twelve<twelveGradesCount:
                 sittingplan.student=twelveGrades[twelve]
                 sittingplan.deskNumber=x+1
                 twelve+=1
                 sittingplan.save()
                 c+=1
-                print("Başarılı " + str(c))
-            
-            
-
-                
-            
-            
-            
-                    
+                print("Başarılı " + str(c))                    
     return render(request,"sql.html",{'data':123})
 
-
-def handleEmptyQuery(object):
-    try:
-        return object
-    except object.DoesNotExist:
-        return False

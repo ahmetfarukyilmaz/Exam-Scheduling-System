@@ -88,7 +88,8 @@ urlpatterns = [
     path('desk_plan/', desk_plan),
     path('sitting_plan/', sitting_plan),
 
-    path('sql/',cheatingAlgorithm)
+    path('sql/',cheatingAlgorithm),
+    path('mail/',mail_sender_exam)
     
 
 
