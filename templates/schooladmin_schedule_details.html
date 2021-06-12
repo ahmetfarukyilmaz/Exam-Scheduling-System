@@ -34,8 +34,6 @@ button {
     {{ form.media }}
 
 <div class="container">
-      <!--<button class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">Takvim Oluştur</button>
-      -->
 
   <div class="row">
     <h3>{{schedule.name}}</h3>
@@ -193,13 +191,14 @@ button {
           </button>
         </div>
         <div class="modal-body">
+          <div class="row">
           <div class="col">
             <h5>Sıra 1 </h5>
             <hr>
-            {%if students[1]%}
-            <h6>Öğrenci Adı : {{students[1].name}}</h6>
-            <h6>Numarası : {{students[1].schoolNumber}}</h6>
-            <h6>Sınıfı : {{students[1].schoolClass.degree}}/{{students[1].schoolClass.branch}}</h6>
+            {%if students.1%}
+            <h6>Öğrenci Adı : {{students.1.name}}</h6>
+            <h6>Numarası : {{students.1.schoolNumber}}</h6>
+            <h6>Sınıfı : {{students.1.schoolClass.degree}}/{{students.1.schoolClass.branch}}</h6>
             {% else %}
             <h6>Boş Sıra</h6>
             {% endif %}
@@ -207,14 +206,15 @@ button {
           <div class="col">
             <h5>Sıra 2 </h5>
             <hr>
-            {%if students[2]%}
-            <h6>Öğrenci Adı : {{students[2].name}}</h6>
-            <h6>Numarası : {{students[2].schoolNumber}}</h6>
-            <h6>Sınıfı : {{students[2].schoolClass.degree}}/{{students[2].schoolClass.branch}}</h6>
+            {%if students.2%}
+            <h6>Öğrenci Adı : {{students.2.name}}</h6>
+            <h6>Numarası : {{students.2.schoolNumber}}</h6>
+            <h6>Sınıfı : {{students.2.schoolClass.degree}}/{{students.2.schoolClass.branch}}</h6>
             {% else %}
             <h6>Boş Sıra</h6>
             {% endif %}
           </div>
+        </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>

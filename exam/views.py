@@ -213,8 +213,8 @@ def schooladmin_schedule_detail(request, id):
     for item in sittingPlans:
         students[item.deskNumber] = item.student
     for i in range(1,41):
-        if i not in students.keys:
-            student[i] = None
+        if i not in students.keys():
+            students[i] = None
     
     context = {
         "schedule" : schedule,

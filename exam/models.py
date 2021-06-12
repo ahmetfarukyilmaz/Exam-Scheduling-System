@@ -163,5 +163,5 @@ class SittingPlan(models.Model):
         db_table = 'SittingPlan'
 
     def __str__(self):
-        return self.name
+        return str(self.schedule)
     
