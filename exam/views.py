@@ -24,7 +24,6 @@ def desk_plan(request):
         context = {
             "form" : form
         }
-        print("ldfnsldf")
         return render(request, "desk_plan.html", context)
 
     context = {
@@ -208,8 +207,20 @@ def schooladmin_schedule(request):
     
 def schooladmin_schedule_detail(request, id):
     schedule = Schedule.objects.get(id = id)
+    exams = Exam.objects.filter(schedule_id = id)
+    students = dict()
+    sittingPlans = SittingPlan.objects.filter(schedule_id = id)
+    for item in sittingPlans:
+        students[item.deskNumber] = item.student
+    for i in range(1,41):
+        if i not in students.keys:
+            student[i] = None
+    
     context = {
-        "schedule" : schedule
+        "schedule" : schedule,
+        "exams" : exams,
+        "students" : students
+        
     }
     return render(request, "schooladmin_schedule_details.html", context)
 
