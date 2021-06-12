@@ -40,8 +40,8 @@ class LoginForm(forms.Form):
 
 
 class UploadStudentForm(forms.Form):
-    degree = forms.ChoiceField(choices=degree_choices)
-    branch = forms.ChoiceField(choices = branch_choices)
+    degree = forms.ChoiceField(choices=degree_choices,label="Sınıf")
+    branch = forms.ChoiceField(choices = branch_choices,label="Şube")
 
 class TeacherInfoForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ad Soyad")
@@ -75,8 +75,8 @@ class StudentInfoForm(forms.Form):
 class ExamForm(forms.Form):
     def __init__(self, teacher_choices,teacher, *args, **kwargs):
         super(ExamForm, self).__init__(*args, **kwargs)
-        self.fields['classes'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id)
-        self.fields['examLocation'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id)
+        self.fields['classes'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id).order_by('degree')
+        self.fields['examLocation'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id).order_by('degree')
         self.fields['observerTeacher'].choices = teacher_choices
         
 
