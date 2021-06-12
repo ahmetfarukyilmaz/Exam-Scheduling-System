@@ -43,6 +43,10 @@ class UploadStudentForm(forms.Form):
     degree = forms.ChoiceField(choices=degree_choices,label="Sınıf")
     branch = forms.ChoiceField(choices = branch_choices,label="Şube")
 
+class SchoolClassForm(forms.Form):
+    degree = forms.ChoiceField(choices=degree_choices,label="Sınıf")
+    branch = forms.ChoiceField(choices = branch_choices,label="Şube")
+
 class TeacherInfoForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ad Soyad")
     email = forms.EmailField(max_length=100, label="Email")

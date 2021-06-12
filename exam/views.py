@@ -206,21 +206,41 @@ def schooladmin_schedule(request):
 
     
 def schooladmin_schedule_detail(request, id):
+    form = SchoolClassForm(request.POST or None)
     schedule = Schedule.objects.get(id = id)
     exams = Exam.objects.filter(schedule_id = id)
     students = dict()
     sittingPlans = SittingPlan.objects.filter(schedule_id = id)
-    for item in sittingPlans:
-        students[item.deskNumber] = item.student
+    if form.is_valid():
+        degree = form.cleaned_data.get("degree")
+        branch = form.cleaned_data.get("branch")
+        for item in sittingPlans:
+            if item.schoolClass.degree == degree and item.schoolClass.branch == branch:
+                students[item.deskNumber] = item.student
+        for i in range(1,41):
+            if i not in students.keys():
+                students[i] = None
+        context = {
+            "schedule" : schedule,
+            "exams" : exams,
+            "students" : students,
+            "form" : form,
+            "branch" : branch,
+            "degree" : degree
+            
+        }
+        return render(request, "schooladmin_schedule_details.html", context)
+    
     for i in range(1,41):
         if i not in students.keys():
             students[i] = None
-    
     context = {
         "schedule" : schedule,
         "exams" : exams,
-        "students" : students
-        
+        "students" : students,
+        "form" : form,
+        "branch" :"",
+        "degree" :""       
     }
     return render(request, "schooladmin_schedule_details.html", context)
 
