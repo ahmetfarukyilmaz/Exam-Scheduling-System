@@ -1,0 +1,13 @@
+SINAV BİLGİLENDİRME !
+
+Takvim İsmi : {{schedule.name}}
+Başlangıç Tarihi: {{schedule.start_date}}
+Bitiş Tarihi: {{schedule.end_date}}
+
+{% for exam in exams  %}
+Sınav İsmi : {{exam.name}}
+Sınav Tarihi: {{exam.date}}
+Sınav Süresi: {{exam.duration}} dakika
+
+
+{% endfor %}

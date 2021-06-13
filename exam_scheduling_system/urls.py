@@ -74,8 +74,10 @@ urlpatterns = [
 
     #STUDENT PATHS
     path('student/', student),
-    path('student/view-exam-details/', student_viewExamDetails),
+    #path('student/view-exam-details/', student_viewExamDetails),
+    path('student/view-schedules/', student_viewSchedules),
     path('student/change-password/', student_changePassword),
+    path('student/schedule/detail/<int:id>', student_schedule_detail),
 
     #TEACHER PATHS
     path('teacher/', teacher),
@@ -88,7 +90,8 @@ urlpatterns = [
     path('desk_plan/', desk_plan),
     path('sitting_plan/', sitting_plan),
 
-    path('sql/',cheatingAlgorithm)
+    path('sql/',cheatingAlgorithm),
+    path('mail/',mail_sender_exam)
     
 
 

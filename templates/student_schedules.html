@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block title %}
-    Öğrenci Anasayfa
+    Sınav Takvimleri
 {% endblock title %}
 
 {% block content %}
+{% load crispy_forms_tags %}
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -15,15 +16,22 @@
     {% endfor %}
 </ul>
 {% endif %}
-<h3>Öğrenci Anasayfa</h3>
-<hr>
 
 
-    <button type="button">
-        <a href="/student/view-schedules/">Sınav detayları!</a>
-    </button>
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <br>
+        <h3>Sınav Takvimleri</h3>
+        <hr>
+        <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
 
-    <button type="button">
-        <a href="/student/change-password">Şifreni değiştir</a>
-    </button>
+            <br>
+            <button type="submit" class="btn btn-primary"> Seç </button>
+
+        </form>
+    </div>
+</div>
+
 {% endblock content %}

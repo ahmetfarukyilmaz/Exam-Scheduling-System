@@ -167,7 +167,7 @@ def is_student(user):
 
 
 
-@user_passes_test(is_student,"index")
+#@user_passes_test(is_student,"index")
 def student(request):
     return render(request, "student.html")
 
@@ -181,8 +181,63 @@ def teacher(request):
 def schooladmin(request):
     return render(request, "schooladmin.html")
 
-def student_viewExamDetails(request):
-    return HttpResponse('Öğrenci sınav detayı görüntüleme ')
+# def student_viewExamDetails(request):
+#     return render(request, "student_schedule_details.html")
+
+def student_viewSchedules(request):
+    currentStudent = Student.objects.filter(user_id=request.user.id).first()
+    allSchedules = Schedule.objects.all()
+    schedule_list = []
+
+    for singleSchedule in allSchedules:
+        if (singleSchedule.school_id == currentStudent.school_id):
+            schedule_list.append((singleSchedule.id, singleSchedule.name))
+
+
+    form = ChooseScheduleForm(schedule_list, currentStudent, request.POST or None)
+    if form.is_valid():
+        scheduleName = form.cleaned_data.get('schedule')
+
+        if not scheduleName:
+            for schedule in allSchedules:
+                if(scheduleName == schedule.name):
+                    scheduleID = schedule.id
+                    return redirect('student_schedule_detail', scheduleID)
+
+    context = {
+        "form": form,
+    }
+    return render(request, "student_schedules.html", context)
+
+
+def student_schedule_detail(request,id):
+    form = SchoolClassForm(request.POST or None)
+    schedule = Schedule.objects.get(id=id)
+    exams = Exam.objects.filter(schedule_id=id)
+    currentStudent = Student.objects.filter(user_id=request.user.id).first()
+    students = dict()
+
+
+
+    #sitting planı student a göre filtrele?
+    sittingPlans = SittingPlan.objects.filter(schedule_id=id)
+    for item in sittingPlans:
+        if item.student == currentStudent:
+            degree = item.schoolClass.degree
+            branch = item.schoolClass.branch
+            deskNumber = item.deskNumber
+
+
+    context = {
+        "schedule": schedule,
+        "exams": exams,
+        "students": students,
+        "form": form,
+        "branch": branch,
+        "degree": degree,
+        "deskNumber": deskNumber,
+    }
+    return render(request, "student_schedule_details.html", context)
 
 
 def student_changePassword(request):
@@ -313,9 +368,6 @@ def teacher_createExam(request):
         for singleExamLocation in examLocation:
             newExam.examLocation.add(singleExamLocation)
 
-
-
-        
 
         messages.success(request, "Sınav oluşturuldu!")
         return redirect("/teacher/")
@@ -611,7 +663,8 @@ def profile(request):
                 "form" : form
             }
             return render(request, "profile.html", context)
-    
+
+
 
 
 
