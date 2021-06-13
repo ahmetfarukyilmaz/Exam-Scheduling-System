@@ -186,31 +186,14 @@ def schooladmin(request):
 
 def student_viewSchedules(request):
     currentStudent = Student.objects.filter(user_id=request.user.id).first()
-    allSchedules = Schedule.objects.all()
-    schedule_list = []
-
-    for singleSchedule in allSchedules:
-        if (singleSchedule.school_id == currentStudent.school_id):
-            schedule_list.append((singleSchedule.id, singleSchedule.name))
-
-
-    form = ChooseScheduleForm(schedule_list, currentStudent, request.POST or None)
-    if form.is_valid():
-        scheduleName = form.cleaned_data.get('schedule')
-        if not scheduleName:
-            for schedule in allSchedules:
-                if(scheduleName == schedule.name):
-                    scheduleID = schedule.id
-                    return redirect('student_schedule_detail', scheduleID)
-
+    schedules = Schedule.objects.filter(school_id=currentStudent.school_id)
     context = {
-        "form": form,
+        "schedules" : schedules
     }
     return render(request, "student_schedules.html", context)
 
 
 def student_schedule_detail(request,id):
-    form = SchoolClassForm(request.POST or None)
     schedule = Schedule.objects.get(id=id)
     exams = Exam.objects.filter(schedule_id=id)
     currentStudent = Student.objects.filter(user_id=request.user.id).first()
@@ -231,7 +214,6 @@ def student_schedule_detail(request,id):
         "schedule": schedule,
         "exams": exams,
         "students": students,
-        "form": form,
         "branch": branch,
         "degree": degree,
         "deskNumber": deskNumber,

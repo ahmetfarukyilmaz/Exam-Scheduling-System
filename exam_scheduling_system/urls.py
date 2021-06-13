@@ -75,7 +75,7 @@ urlpatterns = [
     #STUDENT PATHS
     path('student/', student),
     #path('student/view-exam-details/', student_viewExamDetails),
-    path('student/view-schedules/', student_viewSchedules),
+    path('student/schedule/', student_viewSchedules),
     path('student/change-password/', student_changePassword),
     path('student/schedule/detail/<int:id>', student_schedule_detail),
 
