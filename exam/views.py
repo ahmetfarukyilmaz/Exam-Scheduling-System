@@ -252,8 +252,10 @@ def schooladmin_schedule(request):
 
     
 def schooladmin_schedule_detail(request, id):
-    form = SchoolClassForm(request.POST or None)
     schedule = Schedule.objects.get(id = id)
+    degree=class_filter(schedule)[0]
+    branch=class_filter(schedule)[1]
+    form = SchoolClassForm(degree,branch,request.POST or None)
     exams = Exam.objects.filter(schedule_id = id)
     students = dict()
     sittingPlans = SittingPlan.objects.filter(schedule_id = id)

@@ -1,4 +1,4 @@
-from exam.models import *
+from .models import *
 from django import forms
 from phonenumber_field.formfields import PhoneNumberField
 from tempus_dominus.widgets import  DateTimePicker
@@ -40,8 +40,12 @@ class UploadStudentForm(forms.Form):
     branch = forms.ChoiceField(choices = branch_choices,label="Şube")
 
 class SchoolClassForm(forms.Form):
-    degree = forms.ChoiceField(choices=degree_choices,label="Sınıf")
-    branch = forms.ChoiceField(choices = branch_choices,label="Şube")
+    def __init__(self,degree,branch, *args, **kwargs):
+        super(SchoolClassForm, self).__init__(*args, **kwargs)
+        self.fields['degree'].choices=degree
+        self.fields['branch'].choices=branch
+    degree = forms.ChoiceField(choices=(),label="Sınıf")
+    branch = forms.ChoiceField(choices =(),label="Şube")
 
 class TeacherInfoForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ad Soyad")
@@ -213,7 +217,6 @@ class ScheduleForm(forms.Form):
     def __init__(self, exams, *args, **kwargs):
         super(ScheduleForm, self).__init__(*args, **kwargs)
         self.fields['exams'].queryset=exams
-
     name = forms.CharField(max_length=100,label="Takvim İsmi", required = True)
     exams = forms.ModelMultipleChoiceField(queryset=Exam.objects.none(), widget = forms.CheckboxSelectMultiple, label = "Sınavlar", required= True)
     start_date = forms.DateTimeField(label = "Başlangıç Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
@@ -225,7 +228,6 @@ class ChooseScheduleForm(forms.Form):
     def __init__(self, schedule_choices, student, *args, **kwargs):
         super(ChooseScheduleForm, self).__init__(*args, **kwargs)
         self.fields['schedule'].choices = schedule_choices
-
     schedule = forms.ChoiceField(choices=(), label="Takvimler")
 
 

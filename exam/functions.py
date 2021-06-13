@@ -139,3 +139,14 @@ def registerSchool(request):
     }
     return render(request, "registerschool.html",context)
 
+def class_filter(schedule):
+    classes = SchoolClass.objects.filter(school_id=schedule.school_id)
+    degree = []
+    branch =[]
+    for i in classes:
+        if (str(i.degree),str(i.degree)) not in degree:
+            degree.append((str(i.degree),str(i.degree)))
+        if (str(i.branch),str(i.branch)) not in branch:
+            branch.append((str(i.branch),str(i.branch)))
+    return degree,branch
+
