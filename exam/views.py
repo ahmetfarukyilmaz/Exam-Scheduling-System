@@ -16,27 +16,18 @@ from django.utils.crypto import get_random_string
 #from .examCreatingForms import ExamForm
 from django.views.generic.edit import FormView
 
-# Create your views here.
+def no_authentication(user):
+    if not user.is_authenticated:
+        return True
+    return False
 
-def desk_plan(request):
-    form = DeskPlanForm(request.POST or None)
-    if form.is_valid():
-        context = {
-            "form" : form
-        }
-        return render(request, "desk_plan.html", context)
 
-    context = {
-        "form" : form
-    }
-    return render(request, "desk_plan.html", context)
+def authentication(user):
+    if user.is_authenticated:
+        return True
+    return False
 
-def sitting_plan(request):
-    context = {
-
-    }
-    return render(request, "sittingPlan.html", context)
-
+@user_passes_test(no_authentication, "logout")
 def loginUser(request):
     form = LoginForm(request.POST or None)
     context = {
@@ -131,7 +122,6 @@ def logoutUser(request):
     logout(request)
     return redirect('index')
 
-
 def home(request):
     return render(request, "index.html")
 
@@ -153,6 +143,8 @@ def is_schooladmin(user):
     return False
 
 
+
+
 def is_student(user):
     if not user.is_authenticated:
         return False
@@ -163,23 +155,24 @@ def is_student(user):
 
 
 
-#@user_passes_test(is_student,"index")
+@user_passes_test(is_student,"login")
 def student(request):
     return render(request, "student.html")
 
 
-#@user_passes_test(is_teacher,'index',)
+@user_passes_test(is_teacher,'student',)
 def teacher(request):
     return render(request, "teacher.html")
 
 
-#@user_passes_test(is_schooladmin, "index")
+@user_passes_test(is_schooladmin, "teacher")
 def schooladmin(request):
     return render(request, "schooladmin.html")
 
 # def student_viewExamDetails(request):
 #     return render(request, "student_schedule_details.html")
 
+@user_passes_test(is_student, "login")
 def student_viewSchedules(request):
     currentStudent = Student.objects.filter(user_id=request.user.id).first()
     schedules = Schedule.objects.filter(school_id=currentStudent.school_id)
@@ -189,13 +182,12 @@ def student_viewSchedules(request):
     return render(request, "student_schedules.html", context)
 
 
+@user_passes_test(is_student, "login")
 def student_schedule_detail(request,id):
     schedule = Schedule.objects.get(id=id)
     exams = Exam.objects.filter(schedule_id=id)
     currentStudent = Student.objects.filter(user_id=request.user.id).first()
     students = dict()
-
-
 
     #sitting planı student a göre filtrele?
     sittingPlans = SittingPlan.objects.filter(schedule_id=id)
@@ -204,7 +196,6 @@ def student_schedule_detail(request,id):
             degree = item.schoolClass.degree
             branch = item.schoolClass.branch
             deskNumber = item.deskNumber
-
 
     context = {
         "schedule": schedule,
@@ -217,9 +208,12 @@ def student_schedule_detail(request,id):
     return render(request, "student_schedule_details.html", context)
 
 
+@user_passes_test(is_student, "login")
 def student_changePassword(request):
     return HttpResponse('Öğrenci şifre değiştirme')
 
+
+@user_passes_test(is_schooladmin, "login")
 def schooladmin_schedule(request):
     currentAdmin = SchoolAdministrator.objects.get(user_id = request.user.id)
     allexams = Exam.objects.filter(ownerTeacher__school__id=currentAdmin.school_id,schedule_id=None)
@@ -250,7 +244,8 @@ def schooladmin_schedule(request):
     }
     return render(request, "schooladmin_schedule.html", context)
 
-    
+
+@user_passes_test(is_schooladmin, "login")
 def schooladmin_schedule_detail(request, id):
     schedule = Schedule.objects.get(id = id)
     degree=class_filter(schedule)[0]
@@ -292,13 +287,16 @@ def schooladmin_schedule_detail(request, id):
     }
     return render(request, "schooladmin_schedule_details.html", context)
 
+@user_passes_test(is_teacher, "login")
 def teacher_changeExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı değiştirme')
 
+@user_passes_test(is_teacher, "login")
 def teacher_viewExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı görüntüleme')
 
 
+@user_passes_test(is_teacher, "login")
 def teacher_createExam(request):
 
     currentTeacher = Teacher.objects.filter(user_id=request.user.id).first()
@@ -358,6 +356,7 @@ def teacher_createExam(request):
 
     return render(request, "createExam.html", context)
 
+
 def registerSchool(request):
     form = registerSchoolForm(request.POST or None)
     if form.is_valid():
@@ -386,6 +385,7 @@ def registerSchool(request):
     return render(request, "registerschool.html",context)
 
 
+@user_passes_test(is_schooladmin, "login")
 def schooladmin_uploadStudentList(request):
     form = UploadStudentForm(request.POST or None)
     currentAdmin = SchoolAdministrator.objects.filter(user_id=request.user.id).first()
@@ -433,7 +433,7 @@ def schooladmin_uploadStudentList(request):
     return render(request, "upload.html", context)
 
 
-
+@user_passes_test(authentication, "login")
 def profile(request):
     try:
         teacher =Teacher.objects.get(user_id = request.user.id)
