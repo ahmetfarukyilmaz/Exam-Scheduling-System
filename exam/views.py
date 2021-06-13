@@ -122,6 +122,7 @@ def logoutUser(request):
     logout(request)
     return redirect('index')
 
+@user_passes_test(no_authentication, "schooladmin")
 def home(request):
     return render(request, "index.html")
 
