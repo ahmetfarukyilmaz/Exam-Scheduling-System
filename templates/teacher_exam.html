@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block title %}
-    Takvimler
+    Sınavlar
 {% endblock title %}
 {% block content %}
 {% load crispy_forms_tags %}
@@ -27,47 +27,46 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <h3>Takvimler</h3>
+      <h3>Sınavlar</h3>
       <br>
     </div>
     <div class="col">
-      <button class="btn btn-primary" data-toggle="modal" data-target="#scheduleModal">Takvim Oluştur</button>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#examModal">Sınav Oluştur</button>
       <br>
     </div>
   </div>
   <div class="row" style="margin-top:20px">
 
     <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col"></th>
-          <th scope="col">Takvim Adı</th>
-          <th scope="col">Başlangıç Tarihi</th>
-          <th scope="col">Bitiş Tarihi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in schedules %}
-        <tr>
-          <th scope="row"></th>
-          <td>{{item.name}}</td>
-          <td>{{item.start_date}}</td>
-          <td>{{item.end_date}}</td>
-          <td><a href="detail/{{item.id}}" class="btn btn-info">Detay</a></td>
-          <td><a href="delete/{{item.id}}" class="btn btn-danger">Sil</a></td>
-        </tr>
-        {% endfor %}
-  
-    </table>
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Sınav Adı</th>
+            <th scope="col">Tarih</th>
+            <th scope="col">Süre</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in exams %}
+          <tr>
+            <th scope="row"></th>
+            <td>{{item.name}}</td>
+            <td>{{item.date}}</td>
+            <td>{{item.duration}}</td>
+            <td><a href="delete/{{item.id}}" class="btn btn-danger">Sil</a></td>
+          </tr>
+          {% endfor %}
+    
+      </table>
   </div>
 </div>
 
 
-<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="examModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> Yeni Takvim</h5>
+        <h5 class="modal-title" id="exampleModalLabel"> Yeni Sınav</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -76,7 +75,6 @@
         <form method="post">
           {% csrf_token %}
           {{form|crispy}}
-      
           <br>
           <button type="submit" class="btn btn-primary">Oluştur</button>
       
@@ -88,9 +86,6 @@
     </div>
   </div>
 </div>
-
-
-
 
 
 

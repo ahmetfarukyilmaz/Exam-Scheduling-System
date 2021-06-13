@@ -71,8 +71,9 @@ urlpatterns = [
     #SCHOOL ADMIN PATHS
     path('schooladmin/', schooladmin, name="schooladmin"),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
-    path('schooladmin/schedule/', schooladmin_schedule),
+    path('schooladmin/schedule/', schooladmin_schedule, name="schooladmin_schedule"),
     path('schooladmin/schedule/detail/<int:id>', schooladmin_schedule_detail),
+    path('schooladmin/schedule/delete/<int:id>', schooladmin_schedule_delete),
 
     #STUDENT PATHS
     path('student/', student, name="student"),
@@ -85,7 +86,8 @@ urlpatterns = [
     path('teacher/', teacher, name="teacher"),
     path('teacher/change-exam-details/', teacher_changeExamDetails),
     path('teacher/view-exam-details/', teacher_viewExamDetails),
-    path('teacher/create-exam/', teacher_createExam),
+    path('teacher/exam/', teacher_exam, name="teacher_exam"),
+    path('teacher/exam/delete/<int:id>', teacher_exam_delete),
 
 
     path('sql/',cheatingAlgorithm),

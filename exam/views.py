@@ -288,6 +288,15 @@ def schooladmin_schedule_detail(request, id):
     }
     return render(request, "schooladmin_schedule_details.html", context)
 
+@user_passes_test(is_schooladmin, "login")
+def schooladmin_schedule_delete(request, id):
+    schedule = Schedule.objects.get(id=id)
+    schedule.delete()
+    return redirect("schooladmin_schedule")
+
+
+
+
 @user_passes_test(is_teacher, "login")
 def teacher_changeExamDetails(request):
     return HttpResponse('Öğretmen sınav detayı değiştirme')
@@ -298,7 +307,7 @@ def teacher_viewExamDetails(request):
 
 
 @user_passes_test(is_teacher, "login")
-def teacher_createExam(request):
+def teacher_exam(request):
 
     currentTeacher = Teacher.objects.filter(user_id=request.user.id).first()
     allClasses = SchoolClass.objects.all()
@@ -316,7 +325,9 @@ def teacher_createExam(request):
 
 
     form= ExamForm(teacher_list, currentTeacher,request.POST or None)
+    print("before valid")
     if form.is_valid():
+        print("valid")
         name = form.cleaned_data.get('name')
         date = form.cleaned_data.get('date')
         duration = form.cleaned_data.get('duration')
@@ -349,13 +360,29 @@ def teacher_createExam(request):
 
 
         messages.success(request, "Sınav oluşturuldu!")
-        return redirect("/teacher/")
+        exams = Exam.objects.filter(ownerTeacher_id = currentTeacher.user_id)
+        context = {
+        "form"  : form,
+        "exams" : exams
+        }
+        return render(request, "teacher_exam.html", context)
 
+    exams = Exam.objects.filter(ownerTeacher_id = currentTeacher.user_id)
     context = {
-        "form": form
+        "form"  : form,
+        "exams" : exams
     }
 
-    return render(request, "createExam.html", context)
+    return render(request, "teacher_exam.html", context)
+
+
+
+def teacher_exam_delete(request, id):
+    exam = Exam.objects.get(id=id)
+    exam.delete()
+    messages.success(request, "Sınav Silindi")
+    return redirect("teacher_exam")
+
 
 
 def registerSchool(request):
