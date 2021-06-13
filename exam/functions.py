@@ -27,13 +27,13 @@ def read_student_list(request):
         header=0,usecols="B,D,I",skiprows=3,na_filter=False,names=["Numara","Ad","Soyad"])
 
 
-def cheatingAlgorithm(request):
+def cheatingAlgorithm(request, schedule_id, school_id):
     #will get scheduile id from function parameter
-    students= Student.objects.distinct().filter(exams__schedule_id=999)
-    schedule = Schedule.objects.get(id=999)
+    students= Student.objects.distinct().filter(exams__schedule_id=schedule_id)
+    schedule = Schedule.objects.get(id=schedule_id)
     numberofStudents = students.count()
     #will get school_id from admin's school id
-    classes  = SchoolClass.objects.filter(school_id=1)
+    classes  = SchoolClass.objects.filter(school_id=school_id)
     numberOfClasses = classes.count()
     print("Öğrenci sayısı:" + str(numberofStudents))
     print("Sınıf sayısı:" + str(numberOfClasses))

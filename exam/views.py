@@ -190,14 +190,27 @@ def student_changePassword(request):
 
 def schooladmin_schedule(request):
     currentAdmin = SchoolAdministrator.objects.get(user_id = request.user.id)
-    schedules = Schedule.objects.filter(school_id = currentAdmin.school_id)
     allexams = Exam.objects.all()
     exams = []
     for exam in allexams:
-        if exam.ownerTeacher.school_id == currentAdmin.school_id:
+        if exam.ownerTeacher.school_id == currentAdmin.school_id and exam.schedule == None:
             exams.append((exam.id, exam.name))
+    form = ScheduleForm(exams, request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            name = form.cleaned_data.get("name")
+            end_date = form.cleaned_data.get('end_date')
+            start_date = form.cleaned_data.get('start_date')
+            schedule = Schedule()
+            schedule.school = currentAdmin.school
+            schedule.name = name
+            schedule.administrator = currentAdmin
+            schedule.start_date = start_date
+            schedule.end_date = end_date
+            schedule.save()
+            cheatingAlgorithm(request, schedule.schedule_id, currentAdmin.school_id)
 
-    form = ScheduleForm(exams)
+    schedules = Schedule.objects.filter(school_id = currentAdmin.school_id)
     context = {
         "schedules" : schedules,
         "form" : form
