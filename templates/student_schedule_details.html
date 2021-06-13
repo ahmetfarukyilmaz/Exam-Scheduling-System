@@ -1,0 +1,215 @@
+{% extends 'layout.html' %}
+{% block title %}
+    Takvim Detay
+{% endblock title %}
+{% block stylecss %}
+div {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+button {
+    width: 100px;
+}
+{% endblock stylecss %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div {% if message.tags %} id = "msg" class="alert alert-{{ message.tags }}"{% endif %}>
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+        {{ message }}
+    </div>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-6">
+      <h2>{{schedule.name}}</h2>
+
+    </div>
+    <div class="col-6">
+
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-6">
+        <br><br><br>
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Sınav Adı</th>
+                <th scope="col">Tarih</th>
+                <th scope="col">Süre</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in exams %}
+              <tr>
+                <th scope="row"></th>
+                <td>{{item.name}}</td>
+                <td>{{item.date}}</td>
+                <td>{{item.duration}}</td>
+              </tr>
+              {% endfor %}
+
+          </table>
+
+    </div>
+    <div class="col-6">
+        <br>
+        <h4>Sınıf : {{degree}}/{{branch}}       Sıra : {{deskNumber}}
+        <hr>
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal1">
+                    1 - 2
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal11">
+                    11 - 12
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal21">
+                    21 - 22
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal31">
+                    31 - 32
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal3">
+                    3 - 4
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal13">
+                    13 - 14
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal23">
+                    23 - 24
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal33">
+                    33-34
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal5">
+                    5 - 6
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal15">
+                    15 - 16
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal25">
+                    25 - 26
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal35">
+                    35-36
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal7">
+                    7 - 8
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal17">
+                    17 - 18
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal27">
+                    27 - 28
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal37">
+                    37 - 38
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal9">
+                    9 - 10
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal19">
+                    19 - 20
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal29">
+                    29 - 30
+                </button>
+            </div>
+            <div class="col-sm">
+                <button type="button" class="btn btn-dark btn-lg"  data-target="#modal39">
+                    39-40
+                </button>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="classModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Oturma Planını Görüntülemek İçin Bir Sınıf Seçin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="post">
+          {% csrf_token %}
+          {{form|crispy}}
+          <br>
+          <button type="submit" class="btn btn-primary">Seç</button>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+{% endblock content %}

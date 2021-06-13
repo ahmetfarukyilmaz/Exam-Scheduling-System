@@ -90,12 +90,12 @@ class ExamForm(forms.Form):
     date = forms.DateTimeField(label = "Sınav Tarihi")
     duration = forms.IntegerField(label = "Sınav Süresi (dakika)")
     date = forms.DateTimeField(label = "Sınav Tarihi",
-    input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={'sideBySide' : True}))
+                                input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={'sideBySide' : True}))
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
     classes = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
-    label = "Sınava girecek sınıflar")
+                                label = "Sınava girecek sınıflar")
     examLocation = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
-    label = "Sınav yerleri")
+                                label = "Sınav yerleri")
     observerTeacher = forms.ChoiceField(choices=(), label = "Gözetmen Öğretmen")
 
 
@@ -228,5 +228,11 @@ class ScheduleForm(forms.Form):
     end_date = forms.DateTimeField(label = "Sınav Tarihi", input_formats = '%Y-%m-%d %H:%M:%S',widget=DateTimePicker(options={
         'sideBySide' : True}))
 
+class ChooseScheduleForm(forms.Form):
+    def __init__(self, schedule_choices, student, *args, **kwargs):
+        super(ChooseScheduleForm, self).__init__(*args, **kwargs)
+        self.fields['schedule'].choices = schedule_choices
+
+    schedule = forms.ChoiceField(choices=(), label="Takvimler")
 
 
