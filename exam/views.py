@@ -1,6 +1,7 @@
 from django import contrib
 from django.conf import settings
 import os
+from django.contrib.messages.api import success
 from numpy.lib.function_base import extract
 import pandas as pd
 from .models import *
@@ -292,6 +293,7 @@ def schooladmin_schedule_detail(request, id):
 def schooladmin_schedule_delete(request, id):
     schedule = Schedule.objects.get(id=id)
     schedule.delete()
+    messages.success(request, "Takvim Silindi")
     return redirect("schooladmin_schedule")
 
 
