@@ -3,9 +3,9 @@ from django.conf import settings
 import os
 from numpy.lib.function_base import extract
 import pandas as pd
-from exam.models import *
-from exam.sql import *
-from exam.functions import *
+from .models import *
+from .sql import *
+from .functions import *
 from django.shortcuts import redirect, render, HttpResponse
 from .forms import *
 from django.contrib.auth.models import User
@@ -127,17 +127,13 @@ def register(request):
     return render(request, "register.html", context)
   
 
-    
-
 def logoutUser(request):
     logout(request)
-    messages.success(request, "Başarıyla Çıkış Yaptınız!")
     return redirect('index')
 
 
 def home(request):
     return render(request, "index.html")
-
 
 
 def is_teacher(user):
@@ -235,11 +231,7 @@ def schooladmin_schedule(request):
             start_date = form.cleaned_data.get('start_date')
             exams=form.cleaned_data.get("exams")
             schedule = Schedule()
-            schedule.school = currentAdmin.school
-            schedule.name = name
-            schedule.administrator = currentAdmin
-            schedule.start_date = start_date
-            schedule.end_date = end_date
+            setSchedule(schedule,name,currentAdmin,start_date,end_date)
             schedule.save()
             for exam in exams:
                 t=Exam.objects.get(pk=exam.id)
@@ -249,6 +241,7 @@ def schooladmin_schedule(request):
             
             
             cheatingAlgorithm(request, schedule.id, currentAdmin.school_id)
+            mail_sender_exam(request,schedule.id)
 
     schedules = Schedule.objects.filter(school_id = currentAdmin.school_id)
     context = {
@@ -389,9 +382,6 @@ def registerSchool(request):
         'form': form
     }
     return render(request, "registerschool.html",context)
-
-def about(request):
-    return render(request, "about.html")
 
 
 def schooladmin_uploadStudentList(request):

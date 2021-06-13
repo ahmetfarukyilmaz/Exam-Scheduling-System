@@ -1,11 +1,7 @@
-from django.db.models import query
 from exam.models import *
 from django import forms
-from django.forms import ModelForm
-from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
-from django.forms import MultipleChoiceField, ChoiceField, Form
-from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
+from tempus_dominus.widgets import  DateTimePicker
 
 class RegisterForm(forms.Form):
     username = forms.CharField(max_length=50, label="Kullanıcı Adı")

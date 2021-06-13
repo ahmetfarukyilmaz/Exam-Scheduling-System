@@ -1,4 +1,3 @@
-
 def setAddress(address,country,city,province,street,postalCode):
     address.country = country
     address.city = city
@@ -13,3 +12,10 @@ def setSchool(school,name,address,email,phoneNumber,adminAccessKey,teacherAccess
     school.phoneNumber = phoneNumber
     school.adminAccessKey = adminAccessKey
     school.teacherAccessKey = teacherAccessKey
+
+def setSchedule(schedule,name,currentAdmin,start_date,end_date):
+    schedule.school = currentAdmin.school
+    schedule.name = name
+    schedule.administrator = currentAdmin
+    schedule.start_date = start_date
+    schedule.end_date = end_date

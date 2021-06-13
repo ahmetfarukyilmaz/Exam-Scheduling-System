@@ -1,13 +1,17 @@
 import os
 from django.conf import settings
+from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.template.loader import render_to_string
 import pandas as pd
-from exam.models import *
-from django.shortcuts import render
+from .models import *
+from django.shortcuts import redirect, render
 import math
+from .forms import *
+from .sql import *
+
 
 
 def mail_sender(email,teacherAccessKey,adminAccessKey):
@@ -20,14 +24,12 @@ def mail_sender(email,teacherAccessKey,adminAccessKey):
 
 
 
-def mail_sender_exam(request):
-    # SCHEDULE ID ATTRIBUTE WILL BE PROVIDED AS A PARAMETER
-    students = Student.objects.distinct().filter(exams__schedule_id=100)
+def mail_sender_exam(request,schedule_id):
+    students = Student.objects.distinct().filter(exams__schedule_id=schedule_id)
     for student in students:
         email=User.objects.get(id=student.user_id).email
-        #schedule will get it as a parameter
-        schedule = Schedule.objects.get(pk=100)
-        exams = student.exams.filter(schedule_id=100)
+        schedule = Schedule.objects.get(pk=schedule_id)
+        exams = student.exams.filter(schedule_id=schedule_id)
         template = render_to_string('emailexam.html',
         {'exams':exams,
         'schedule':schedule})
@@ -36,7 +38,6 @@ def mail_sender_exam(request):
         [email],fail_silently=False)
         if email:
             print(student.name + " öğrencisine mail gönderildi")
-    return render(request,"emailexam.html",{'examName':"selam"})
     
 
 
@@ -50,11 +51,9 @@ def read_student_list(request):
 
 
 def cheatingAlgorithm(request, schedule_id, school_id):
-    #will get scheduile id from function parameter
     students= Student.objects.distinct().filter(exams__schedule_id=schedule_id)
     schedule = Schedule.objects.get(id=schedule_id)
     numberofStudents = students.count()
-    #will get school_id from admin's school id
     classes  = SchoolClass.objects.filter(school_id=school_id)
     numberOfClasses = classes.count()
     print("Öğrenci sayısı:" + str(numberofStudents))
@@ -110,6 +109,33 @@ def cheatingAlgorithm(request, schedule_id, school_id):
                 twelve+=1
                 sittingplan.save()
                 c+=1
-                print("Başarılı " + str(c))                    
-    return render(request,"sql.html",{'data':123})
+                print("Başarılı " + str(c))
+
+
+def registerSchool(request):
+    form = registerSchoolForm(request.POST or None)
+    if form.is_valid():
+        schoolName = form.cleaned_data.get('schoolName')
+        email = form.cleaned_data.get('email')
+        phoneNumber = form.cleaned_data.get('phoneNumber')
+        country = form.cleaned_data.get('country')
+        city = form.cleaned_data.get('city')
+        province = form.cleaned_data.get('province')
+        street = form.cleaned_data.get('street')
+        postalCode = form.cleaned_data.get('postalCode')
+        address = Address()
+        setAddress(address,country,city,province,street,postalCode)
+        address.save()
+        newSchool = School()
+        adminAccessKey=get_random_string(length=18)
+        teacherAccessKey=get_random_string(length=18)
+        setSchool(newSchool,schoolName,address,email,phoneNumber,adminAccessKey,teacherAccessKey)
+        newSchool.save()
+        mail_sender(email,teacherAccessKey,adminAccessKey)
+        messages.success(request,'Okul Kaydetme Başarılı. Mail adresinize gelen erişim anahtarları ile sisteme kayıt olabilirsiniz.')
+        return redirect('/register-school/')
+    context = {
+        'form': form
+    }
+    return render(request, "registerschool.html",context)
 

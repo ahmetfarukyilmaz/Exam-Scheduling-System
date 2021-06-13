@@ -24,6 +24,9 @@ from django.contrib import admin
 from django.urls import path
 from exam.views import *
 from exam.functions import *
+from exam.schooladmin import *
+from exam.student import *
+from exam.teacher import *
 import django
 
 
@@ -62,7 +65,6 @@ urlpatterns = [
     #PROFILE EDIT PATH
     path('profile/', profile),
 
-    path('about/', about),
 
     path('register-school/', registerSchool),
 
