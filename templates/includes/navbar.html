@@ -2,11 +2,10 @@
   <a class="navbar-brand" href="/">Exam Scheduling</a>
   <ul class="navbar-nav mr-auto">
     <li class="nav-item active">
-      <a class="nav-link" href="/">Ana Sayfa</a>
+      <a class="nav-link" href="/schooladmin">Ana Sayfa</a>
     <li class="nav-item">
     {% if request.user.is_authenticated %}
     <li class="nav-item">
-      <a class="nav-link active" href="/schooladmin/upload-student-list">Upload Students(Test)</a>
     </li>
     {%endif%}
     

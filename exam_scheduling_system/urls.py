@@ -41,8 +41,8 @@ urlpatterns = [
     path('',home,name="index"),
 
     #AUTHENTICATION PATHS
-    path('login/', loginUser),
-    path('logout/', logoutUser),
+    path('login/', loginUser,name="login"),
+    path('logout/', logoutUser,name="logout"),
     path('register/', register),
 
     #PASSWORD RESET PATHS
@@ -69,28 +69,24 @@ urlpatterns = [
     path('register-school/', registerSchool),
 
     #SCHOOL ADMIN PATHS
-    path('schooladmin/', schooladmin),
+    path('schooladmin/', schooladmin, name="schooladmin"),
     path('schooladmin/upload-student-list/', schooladmin_uploadStudentList),
     path('schooladmin/schedule/', schooladmin_schedule),
     path('schooladmin/schedule/detail/<int:id>', schooladmin_schedule_detail),
 
     #STUDENT PATHS
-    path('student/', student),
+    path('student/', student, name="student"),
     #path('student/view-exam-details/', student_viewExamDetails),
     path('student/schedule/', student_viewSchedules),
     path('student/change-password/', student_changePassword),
     path('student/schedule/detail/<int:id>', student_schedule_detail),
 
     #TEACHER PATHS
-    path('teacher/', teacher),
+    path('teacher/', teacher, name="teacher"),
     path('teacher/change-exam-details/', teacher_changeExamDetails),
     path('teacher/view-exam-details/', teacher_viewExamDetails),
     path('teacher/create-exam/', teacher_createExam),
 
-    
-    
-    path('desk_plan/', desk_plan),
-    path('sitting_plan/', sitting_plan),
 
     path('sql/',cheatingAlgorithm),
     path('mail/',mail_sender_exam)
