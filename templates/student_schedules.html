@@ -1,9 +1,7 @@
 {% extends 'layout.html' %}
-
 {% block title %}
-    Sınav Takvimleri
+    Takvimler
 {% endblock title %}
-
 {% block content %}
 {% load crispy_forms_tags %}
 {% if messages %}
@@ -17,21 +15,44 @@
 </ul>
 {% endif %}
 
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
 
-<div class="row">
-    <div class="col-md-6 offset-md-3">
-        <br>
-        <h3>Sınav Takvimleri</h3>
-        <hr>
-        <form method="post">
-            {% csrf_token %}
-            {{form|crispy}}
+    {# Include Bootstrap 4 and jQuery #}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
-            <br>
-            <button type="submit" class="btn btn-primary"> Seç </button>
+    {# Django Tempus Dominus assets are included in `{{ form.media }}` #}
+    {{ form.media }}
 
-        </form>
-    </div>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h3>Takvimler</h3>
+      <hr>
+      
+  <div class="row" style="margin-top:20px">
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Takvim Adı</th>
+          <th scope="col">Başlangıç Tarihi</th>
+          <th scope="col">Bitiş Tarihi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in schedules %}
+        <tr>
+          <th scope="row"></th>
+          <td>{{item.name}}</td>
+          <td>{{item.start_date}}</td>
+          <td>{{item.end_date}}</td>
+          <td><a href="detail/{{item.id}}" class="btn btn-info">Detay</a></td>
+        </tr>
+        {% endfor %}
+  
+    </table>
+  </div>
 </div>
-
 {% endblock content %}
