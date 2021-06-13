@@ -197,7 +197,6 @@ def student_viewSchedules(request):
     form = ChooseScheduleForm(schedule_list, currentStudent, request.POST or None)
     if form.is_valid():
         scheduleName = form.cleaned_data.get('schedule')
-
         if not scheduleName:
             for schedule in allSchedules:
                 if(scheduleName == schedule.name):
@@ -245,17 +244,14 @@ def student_changePassword(request):
 
 def schooladmin_schedule(request):
     currentAdmin = SchoolAdministrator.objects.get(user_id = request.user.id)
-    allexams = Exam.objects.all()
-    exams = []
-    for exam in allexams:
-        if exam.ownerTeacher.school_id == currentAdmin.school_id and exam.schedule == None:
-            exams.append((exam.id, exam.name))
-    form = ScheduleForm(exams, request.POST or None)
+    allexams = Exam.objects.filter(ownerTeacher__school__id=currentAdmin.school_id,schedule_id=None)
+    form = ScheduleForm(allexams, request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             name = form.cleaned_data.get("name")
             end_date = form.cleaned_data.get('end_date')
             start_date = form.cleaned_data.get('start_date')
+            exams=form.cleaned_data.get("exams")
             schedule = Schedule()
             schedule.school = currentAdmin.school
             schedule.name = name
@@ -263,7 +259,14 @@ def schooladmin_schedule(request):
             schedule.start_date = start_date
             schedule.end_date = end_date
             schedule.save()
-            cheatingAlgorithm(request, schedule.schedule_id, currentAdmin.school_id)
+            for exam in exams:
+                t=Exam.objects.get(pk=exam.id)
+                t.schedule_id=schedule.id
+                t.save()
+            
+            
+            
+            cheatingAlgorithm(request, schedule.id, currentAdmin.school_id)
 
     schedules = Schedule.objects.filter(school_id = currentAdmin.school_id)
     context = {
