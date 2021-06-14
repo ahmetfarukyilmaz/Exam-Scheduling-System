@@ -210,10 +210,6 @@ def student_schedule_detail(request,id):
     return render(request, "student_schedule_details.html", context)
 
 
-@user_passes_test(is_student, "login")
-def student_changePassword(request):
-    return HttpResponse('Öğrenci şifre değiştirme')
-
 
 @user_passes_test(is_schooladmin, "login")
 def schooladmin_schedule(request):
