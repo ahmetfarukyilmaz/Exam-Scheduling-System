@@ -1,23 +1,14 @@
+<html>
 {% extends 'layout.html' %} {% block title %} Upload {% endblock title %}
 {%block content %}
  {% load crispy_forms_tags %}
+ 
  <head>
+ {% load static  %}
+ <link rel="stylesheet" href="{% static 'css/style.css' %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(
-    function(){
-        $('input:file').change(
-            function(){
-                if ($(this).val()) {
-                    $('button:submit').attr('disabled',false);
-                    // or, as has been pointed out elsewhere:
-                    // $('input:submit').removeAttr('disabled'); 
-                } 
-            }
-            );
-    });
-</script>
 </head>
+<body>
 {% if messages%}
 <ul class="messages">
   {% for message in messages %}
@@ -46,3 +37,5 @@ $(document).ready(
 
     {% endblock content %}
 
+</body>
+</html>

@@ -288,6 +288,7 @@ def schooladmin_schedule_detail(request, id):
 @user_passes_test(is_schooladmin, "login")
 def schooladmin_schedule_delete(request, id):
     schedule = Schedule.objects.get(id=id)
+
     schedule.delete()
     messages.success(request, "Takvim Silindi")
     return redirect("schooladmin_schedule")
@@ -351,10 +352,6 @@ def teacher_exam(request):
             students = Student.objects.filter(schoolClass_id=singleClass.id)
             for student in students :
                 student.exams.add(newExam)
-
-
-        for singleExamLocation in examLocation:
-            newExam.examLocation.add(singleExamLocation)
 
 
         messages.success(request, "Sınav oluşturuldu!")

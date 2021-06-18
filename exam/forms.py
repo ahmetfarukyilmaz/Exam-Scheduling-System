@@ -43,7 +43,7 @@ class SchoolClassForm(forms.Form):
     def __init__(self,degree,branch, *args, **kwargs):
         super(SchoolClassForm, self).__init__(*args, **kwargs)
         self.fields['degree'].choices=degree
-        self.fields['branch'].choices=branch
+        self.fields['branch'].choices=sorted(branch)
     degree = forms.ChoiceField(choices=(),label="Sınıf")
     branch = forms.ChoiceField(choices =(),label="Şube")
 
@@ -80,7 +80,7 @@ class ExamForm(forms.Form):
     def __init__(self, teacher_choices,teacher, *args, **kwargs):
         super(ExamForm, self).__init__(*args, **kwargs)
         self.fields['classes'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id).order_by('degree')
-        self.fields['examLocation'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id).order_by('degree')
+        """ self.fields['examLocation'].queryset = SchoolClass.objects.filter(school_id=teacher.school_id).order_by('degree') """
         self.fields['observerTeacher'].choices = teacher_choices
         
     name = forms.CharField(max_length=50, label = "Sınav Adı")
@@ -91,8 +91,6 @@ class ExamForm(forms.Form):
     duration = forms.IntegerField(label = "Sınav süresi(dakika)")
     classes = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
                                 label = "Sınava girecek sınıflar")
-    examLocation = forms.ModelMultipleChoiceField(queryset=SchoolClass.objects.none(), widget = forms.CheckboxSelectMultiple,
-                                label = "Sınav yerleri")
     observerTeacher = forms.ChoiceField(choices=(), label = "Gözetmen Öğretmen")
 
 
@@ -101,7 +99,6 @@ class ExamForm(forms.Form):
         date = self.cleaned_data.get("date")
         duration = self.cleaned_data.get("duration")
         classes = self.cleaned_data.get("classes")
-        examLocation = self.cleaned_data.get("examLocation")
         observerTeacher = self.cleaned_data.get("observerTeacher")
         ownerTeacher = self.cleaned_data.get("ownerTeacher")
 
@@ -111,7 +108,6 @@ class ExamForm(forms.Form):
             "date"  : date,
             "duration"    : duration,
             "classes" : classes,
-            "examLocation": examLocation ,
             "observerTeacher": observerTeacher,
             "ownerTeacher": ownerTeacher,
         }

@@ -1,3 +1,4 @@
+<html>
 {% extends 'layout.html' %}
 {% block title %}
     Takvimler
@@ -24,14 +25,7 @@
     {# Django Tempus Dominus assets are included in `{{ form.media }}` #}
     {{ form.media }}
 
-<style>
-body {
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzWcX4ZmB6lCNzlnseyE4B7QyUBW_YCW8hDw&usqp=CAU');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-}
-</style>
+
 
 <div class="container">
   <div class="row">
@@ -97,10 +91,5 @@ body {
     </div>
   </div>
 </div>
-
-
-
-
-
-
 {% endblock content %}
+</html>

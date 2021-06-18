@@ -1,3 +1,5 @@
+
+<html>
 {% extends 'layout.html' %}
 {% block title %}
     Okul Yetkilisi Anasayfa
@@ -15,21 +17,16 @@
 {% endif %}
 <h3>Okul Yetkilisi Anasayfa</h3>
 <hr>
-<style>
-body {
-  background-image: url('https://i.pinimg.com/originals/3d/38/4d/3d384d829dbf4b678cfea617114e149d.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: 100% 100%;
-}
-</style>
+
     <button type="button" style="background-color: aliceblue">
         <a href="/schooladmin/upload-student-list/">Sınıf listesi yükle!</a>
     </button>
 
-    <button type="button" style="background-color: aliceblue">
+    <button type="button">
         <a href="/schooladmin/schedule/">Sınav takvimi oluştur!</a>
     </button>
 
 
 {% endblock content %}
+
+</html>

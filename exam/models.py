@@ -154,7 +154,7 @@ class Schedule(models.Model):
 
 
 class SittingPlan(models.Model):
-    schedule = ForeignKey('Schedule',on_delete= SET_NULL, null=True, blank=True)
+    schedule = ForeignKey('Schedule',on_delete= CASCADE, null=True, blank=True)
     student = models.ForeignKey('Student', on_delete = models.SET_NULL, null=True, related_name='student')
     schoolClass = models.ForeignKey('SchoolClass', on_delete = models.SET_NULL, null=True, related_name='school_class')
     deskNumber = models.PositiveIntegerField()
