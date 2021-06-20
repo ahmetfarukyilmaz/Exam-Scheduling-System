@@ -15,16 +15,29 @@
     {% endfor %}
 </ul>
 {% endif %}
-<h3>Okul Yetkilisi Anasayfa</h3>
-<hr>
+<div class="row">
+    <h3>Okul Yetkilisi Anasayfa</h3>
+    
+</div>
+<div class="row">
+    <hr>
+    <br>
+    
+</div>
 
-    <button type="button" style="background-color: aliceblue">
-        <a href="/schooladmin/upload-student-list/">Sınıf listesi yükle!</a>
-    </button>
+<div class="row">
+    <div class="col">
+         <a class="btn btn-primary btn-lg btn-block" href="/schooladmin/upload-student-list/">Sınıf listesi yükle!</a>
+    </div>
+    <div class="col">
+        <a class="btn btn-primary btn-lg btn-block" href="/schooladmin/schedule/">Sınav takvimleri</a>
+    </div>
+  </div>
+  <div class="row">
 
-    <button type="button">
-        <a href="/schooladmin/schedule/">Sınav takvimi oluştur!</a>
-    </button>
+    
+
+    
 
 
 {% endblock content %}
