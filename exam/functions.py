@@ -51,20 +51,20 @@ def read_student_list(request):
 
 
 def cheatingAlgorithm(request, schedule_id, school_id):
-    students= Student.objects.distinct().filter(exams__schedule_id=schedule_id)
+    students= Student.objects.filter(exams__schedule_id=schedule_id)
     schedule = Schedule.objects.get(id=schedule_id)
     numberofStudents = students.count()
     classes  = SchoolClass.objects.filter(school_id=school_id)
     numberOfClasses = classes.count()
     print("Öğrenci sayısı:" + str(numberofStudents))
     print("Sınıf sayısı:" + str(numberOfClasses))
-    nineGrades=students.filter(schoolClass__degree=9).order_by('?')
+    nineGrades=students.distinct().filter(schoolClass__degree=9)
     nineGradesCount = nineGrades.count()
-    tenGrades = students.filter(schoolClass__degree=10).order_by('?')
+    tenGrades = students.distinct().filter(schoolClass__degree=10)
     tenGradesCount = tenGrades.count()
-    elevenGrades = students.filter(schoolClass__degree=11).order_by('?')
+    elevenGrades = students.distinct().filter(schoolClass__degree=11)
     elevenGradesCount = elevenGrades.count()
-    twelveGrades = students.filter(schoolClass__degree=12).order_by('?')
+    twelveGrades = students.distinct().filter(schoolClass__degree=12)
     twelveGradesCount=twelveGrades.count()
     maxCount=max(nineGradesCount,tenGradesCount,elevenGradesCount,twelveGradesCount)
     studentPerClass=math.ceil((maxCount*4)/numberOfClasses)
@@ -74,43 +74,161 @@ def cheatingAlgorithm(request, schedule_id, school_id):
     print("11. sınıf: " + str(elevenGradesCount))
     print("12. sınıf: "+  str(twelveGradesCount))
     nine,ten,eleven,twelve,c,perDesk=0,0,0,0,0,4
+    completed = 0
+    for student in nineGrades:
+        print(student.name)
     for schoolClass in classes:
         for x in range(40):
-            if nine==nineGradesCount or ten==tenGradesCount or eleven==elevenGradesCount or twelve==twelveGradesCount:
-                if perDesk==4:
-                    perDesk=3
-            sittingplan = SittingPlan()
-            sittingplan.schedule=schedule
-            sittingplan.schoolClass=schoolClass
-            if x%perDesk==0 and nine<nineGradesCount:
-                sittingplan.student=nineGrades[nine]
-                sittingplan.deskNumber=x+1
-                nine+=1
-                sittingplan.save()
-                c+=1
-                print("Başarılı " + str(c))
-            elif x%perDesk==1 and ten<tenGradesCount:
-                sittingplan.student=tenGrades[ten]
-                sittingplan.deskNumber=x+1
-                ten+=1
-                sittingplan.save()
-                c+=1
-                print("Başarılı " + str(c))
-            elif x%perDesk==2 and eleven<elevenGradesCount:
-                sittingplan.student=elevenGrades[eleven]
-                sittingplan.deskNumber=x+1
-                eleven+=1
-                sittingplan.save()
-                c+=1
-                print("Başarılı " + str(c))  
-            elif x%perDesk==3 and twelve<twelveGradesCount:
-                sittingplan.student=twelveGrades[twelve]
-                sittingplan.deskNumber=x+1
-                twelve+=1
-                sittingplan.save()
-                c+=1
-                print("Başarılı " + str(c))
+            if completed>0:
+                perDesk=perDesk-completed
+            if perDesk==4:
+                if x%perDesk==0  and nine<nineGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,nineGrades[nine],x+1)
+                    nine+=1
+                    sittingplan.save()
+                    c+=1
+                    if nine==nineGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
+                elif x%perDesk==1 and ten<tenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,tenGrades[ten],x+1)
+                    ten+=1
+                    sittingplan.save()
+                    c+=1
+                    if ten==tenGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
+                elif x%perDesk==2 and eleven<elevenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,elevenGrades[eleven],x+1)
+                    eleven+=1
+                    sittingplan.save()
+                    c+=1
+                    if eleven==elevenGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))  
+                elif x%perDesk==3 and twelve<twelveGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,twelveGrades[twelve],x+1)
+                    twelve+=1
+                    sittingplan.save()
+                    c+=1
+                    if twelve==twelveGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
 
+            elif perDesk==3:
+                if x%perDesk==0 and nine<nineGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,nineGrades[nine],x+1)
+                    nine+=1
+                    sittingplan.save()
+                    c+=1
+                    if nine==nineGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
+                elif x%perDesk==1 and ten<tenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,tenGrades[ten],x+1)
+                    ten+=1
+                    sittingplan.save()
+                    c+=1
+                    if ten==tenGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
+                elif x%perDesk==2 and eleven<elevenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,elevenGrades[eleven],x+1)
+                    eleven+=1
+                    sittingplan.save()
+                    c+=1
+                    if eleven==elevenGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))  
+                elif  x%perDesk==0 and twelve<twelveGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,twelveGrades[twelve],x+1)
+                    twelve+=1
+                    sittingplan.save()
+                    c+=1
+                    if twelve==twelveGradesCount:
+                        completed+=1
+                    print("Başarılı " + str(c))
+            elif perDesk==2:
+                if  x%perDesk==0 and nine<nineGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,nineGrades[nine],x+1)
+                    nine+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+                elif  x%perDesk==1 and ten<tenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,tenGrades[ten],x+1)
+                    ten+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+                elif x%perDesk==0 and eleven<elevenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,elevenGrades[eleven],x+1)
+                    eleven+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))  
+                elif x%perDesk==1 and twelve<twelveGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,twelveGrades[twelve],x+1)
+                    twelve+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+            else:
+                if   nine<nineGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,nineGrades[nine],x+1)
+                    nine+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+                elif   ten<tenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,tenGrades[ten],x+1)
+                    ten+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+                elif  eleven<elevenGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,elevenGrades[eleven],x+1)
+                    eleven+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))  
+                elif  twelve<twelveGradesCount:
+                    sittingplan = SittingPlan()
+                    setSittingPlan(sittingplan,schedule,schoolClass,twelveGrades[twelve],x+1)
+                    twelve+=1
+                    sittingplan.save()
+                    c+=1
+
+                    print("Başarılı " + str(c))
+
+
+
+    print("9lar:" + str(nine))
+    print("10lar:" + str(ten))
+    print("11lar:" + str(eleven))
+    print("12lar:" + str(twelve))
 
 def registerSchool(request):
     form = registerSchoolForm(request.POST or None)

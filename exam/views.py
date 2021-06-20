@@ -190,7 +190,7 @@ def student_schedule_detail(request,id):
     exams = Exam.objects.filter(schedule_id=id)
     currentStudent = Student.objects.filter(user_id=request.user.id).first()
     students = dict()
-
+    
     #sitting planı student a göre filtrele?
     sittingPlans = SittingPlan.objects.filter(schedule_id=id)
     for item in sittingPlans:

@@ -19,3 +19,9 @@ def setSchedule(schedule,name,currentAdmin,start_date,end_date):
     schedule.administrator = currentAdmin
     schedule.start_date = start_date
     schedule.end_date = end_date
+
+def setSittingPlan(sittingPlan,schedule,schoolClass,student,deskNumber):
+    sittingPlan.schedule=schedule
+    sittingPlan.schoolClass=schoolClass
+    sittingPlan.student=student
+    sittingPlan.deskNumber=deskNumber

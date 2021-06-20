@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'exam_scheduling_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exam_scheduling_system',
@@ -88,10 +88,10 @@ DATABASES = {
         'HOST':'examschedulingsystem.ctphni9y5upc.us-east-2.rds.amazonaws.com',
         'PORT':'5432'
     }
-}
+} """
 
 #LOCAL DATABASE
-""" DATABASES = {
+DATABASES = {
     'default':{
        'ENGINE':'django.db.backends.postgresql_psycopg2',
        'NAME':'postgres',
@@ -101,7 +101,7 @@ DATABASES = {
        'POST':'5432',
         'ATOMATIC_REQUESTS':True,
     }
-} """
+}
 
 
 # Password validation
@@ -117,7 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'tr'
 
 TIME_ZONE = 'UTC'
 
