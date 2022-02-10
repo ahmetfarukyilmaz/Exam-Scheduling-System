@@ -1,6 +1,6 @@
 asgiref==3.3.4
 Cython==0.29.23
-Django==3.2.3
+Django==3.2.12
 django-bootstrap-themes==3.3.6
 django-crispy-forms==1.11.2
 django-datetime-widget2==0.9.5
